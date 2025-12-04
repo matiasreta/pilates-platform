@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const features = [
     'Acceso ilimitado a más de 200 videos organizados por trimestre',
@@ -67,17 +68,19 @@ export default function Pricing() {
                         </ul>
 
                         {/* CTA Button */}
-                        <motion.button
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 0.5 }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="btn-primary w-full"
-                        >
-                            Comenzar Ahora
-                        </motion.button>
+                        <Link href="/pricing">
+                            <motion.button
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: 0.5 }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="btn-primary w-full"
+                            >
+                                Comenzar Ahora
+                            </motion.button>
+                        </Link>
                     </motion.div>
 
                     {/* Image Side */}

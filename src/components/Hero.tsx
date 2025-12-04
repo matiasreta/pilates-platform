@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function Hero() {
     return (
@@ -29,13 +30,15 @@ export default function Hero() {
                         y conexión con su cuerpo a través de la práctica de pilates.
                     </p>
 
-                    <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="btn-primary"
-                    >
-                        Ver plan para embarazadas
-                    </motion.button>
+                    <Link href="/login">
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="btn-primary"
+                        >
+                            Ver plan para embarazadas
+                        </motion.button>
+                    </Link>
                 </motion.div>
             </div>
         </section>

@@ -33,9 +33,9 @@ export default function Navbar() {
                             {link.name}
                         </Link>
                     ))}
-                    <button className="btn-secondary">
+                    <Link href="/login" className="btn-secondary">
                         Login
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -61,9 +61,9 @@ export default function Navbar() {
                                 {link.name}
                             </Link>
                         ))}
-                        <button className="btn-secondary">
+                        <Link href="/login" className="btn-secondary" onClick={() => setIsMobileMenuOpen(false)}>
                             Login
-                        </button>
+                        </Link>
                     </div>
                 </div>
             )}
