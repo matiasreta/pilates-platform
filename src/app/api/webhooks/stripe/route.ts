@@ -42,6 +42,10 @@ export async function POST(req: NextRequest) {
                 // Get full subscription object
                 const subscription = await stripe.subscriptions.retrieve(subscriptionId)
 
+                // Get current_period_end safely
+                const periodEnd = (subscription as any).current_period_end
+                const currentPeriodEnd = periodEnd ? new Date(periodEnd * 1000).toISOString() : null
+
                 // Create subscription record in Supabase
                 const { error } = await supabase.from('subscriptions').insert({
                     user_id: userId,
@@ -49,7 +53,7 @@ export async function POST(req: NextRequest) {
                     stripe_subscription_id: subscriptionId,
                     status: subscription.status,
                     price_id: subscription.items.data[0].price.id,
-                    current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+                    current_period_end: currentPeriodEnd,
                 })
 
                 if (error) {
@@ -69,12 +73,16 @@ export async function POST(req: NextRequest) {
                     break
                 }
 
+                // Get current_period_end safely
+                const periodEnd = (subscription as any).current_period_end
+                const currentPeriodEnd = periodEnd ? new Date(periodEnd * 1000).toISOString() : null
+
                 // Update subscription in Supabase
                 const { error } = await supabase
                     .from('subscriptions')
                     .update({
                         status: subscription.status,
-                        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+                        current_period_end: currentPeriodEnd,
                     })
                     .eq('stripe_subscription_id', subscription.id)
 
@@ -113,9 +121,11 @@ export async function POST(req: NextRequest) {
 
             case 'invoice.payment_failed': {
                 const invoice = event.data.object as Stripe.Invoice
-                const subscriptionId = invoice.subscription as string
+                // Type assertion to access subscription property
+                const subscriptionId = (invoice as any).subscription
+                const subId = typeof subscriptionId === 'string' ? subscriptionId : subscriptionId?.id
 
-                if (!subscriptionId) break
+                if (!subId) break
 
                 // Mark subscription as past_due
                 const { error } = await supabase
@@ -123,21 +133,23 @@ export async function POST(req: NextRequest) {
                     .update({
                         status: 'past_due',
                     })
-                    .eq('stripe_subscription_id', subscriptionId)
+                    .eq('stripe_subscription_id', subId)
 
                 if (error) {
                     console.error('Error marking subscription as past_due:', error)
                 } else {
-                    console.log('⚠️  Payment failed for subscription:', subscriptionId)
+                    console.log('⚠️  Payment failed for subscription:', subId)
                 }
                 break
             }
 
             case 'invoice.payment_succeeded': {
                 const invoice = event.data.object as Stripe.Invoice
-                const subscriptionId = invoice.subscription as string
+                // Type assertion to access subscription property
+                const subscriptionId = (invoice as any).subscription
+                const subId = typeof subscriptionId === 'string' ? subscriptionId : subscriptionId?.id
 
-                if (!subscriptionId) break
+                if (!subId) break
 
                 // Update subscription to active
                 const { error } = await supabase
@@ -145,12 +157,12 @@ export async function POST(req: NextRequest) {
                     .update({
                         status: 'active',
                     })
-                    .eq('stripe_subscription_id', subscriptionId)
+                    .eq('stripe_subscription_id', subId)
 
                 if (error) {
                     console.error('Error updating subscription to active:', error)
                 } else {
-                    console.log('✅ Payment succeeded for subscription:', subscriptionId)
+                    console.log('✅ Payment succeeded for subscription:', subId)
                 }
                 break
             }
