@@ -39,12 +39,45 @@ export async function POST(req: NextRequest) {
                     break
                 }
 
-                // Get full subscription object
-                const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+                // Get full subscription object with expanded data
+                const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+                    expand: ['latest_invoice', 'customer']
+                })
 
-                // Get current_period_end safely
-                const periodEnd = (subscription as any).current_period_end
-                const currentPeriodEnd = periodEnd ? new Date(periodEnd * 1000).toISOString() : null
+                // Debug log - let's see EVERYTHING
+                const subData = subscription as any
+                console.log('Full Subscription Object:', JSON.stringify({
+                    id: subData.id,
+                    status: subData.status,
+                    current_period_start: subData.current_period_start,
+                    current_period_end: subData.current_period_end,
+                    billing_cycle_anchor: subData.billing_cycle_anchor,
+                    trial_end: subData.trial_end,
+                    keys: Object.keys(subData).filter(k => k.includes('period') || k.includes('end') || k.includes('start'))
+                }, null, 2))
+
+                // Try to get the period end from multiple possible locations
+                let currentPeriodEnd = null
+
+                // Try direct property
+                if (subData.current_period_end) {
+                    currentPeriodEnd = new Date(subData.current_period_end * 1000).toISOString()
+                    console.log('✅ Found current_period_end directly:', currentPeriodEnd)
+                }
+                // Try from billing_cycle_anchor + 1 month (fallback)
+                else if (subData.billing_cycle_anchor) {
+                    const anchorDate = new Date(subData.billing_cycle_anchor * 1000)
+                    anchorDate.setMonth(anchorDate.getMonth() + 1)
+                    currentPeriodEnd = anchorDate.toISOString()
+                    console.log('⚠️ Calculated current_period_end from billing_cycle_anchor:', currentPeriodEnd)
+                }
+                // Try from created + 1 month (last resort)
+                else if (subData.created) {
+                    const createdDate = new Date(subData.created * 1000)
+                    createdDate.setMonth(createdDate.getMonth() + 1)
+                    currentPeriodEnd = createdDate.toISOString()
+                    console.log('⚠️ Calculated current_period_end from created date:', currentPeriodEnd)
+                }
 
                 // Create subscription record in Supabase
                 const { error } = await supabase.from('subscriptions').insert({
@@ -60,6 +93,39 @@ export async function POST(req: NextRequest) {
                     console.error('Error creating subscription:', error)
                 } else {
                     console.log('✅ Subscription created for user:', userId)
+                }
+                break
+            }
+
+            case 'customer.subscription.created': {
+                const subscription = event.data.object as Stripe.Subscription
+                const userId = subscription.metadata?.user_id
+
+                if (!userId) {
+                    console.error('No user_id in subscription metadata')
+                    break
+                }
+
+                // Get current_period_end safely
+                const subData = subscription as any
+                const currentPeriodEnd = subData.current_period_end
+                    ? new Date(subData.current_period_end * 1000).toISOString()
+                    : null
+
+                console.log('📅 Updating subscription with period end:', currentPeriodEnd)
+
+                // Update the subscription with current_period_end
+                const { error } = await supabase
+                    .from('subscriptions')
+                    .update({
+                        current_period_end: currentPeriodEnd,
+                    })
+                    .eq('stripe_subscription_id', subscription.id)
+
+                if (error) {
+                    console.error('Error updating subscription period:', error)
+                } else {
+                    console.log('✅ Subscription period updated for user:', userId)
                 }
                 break
             }
