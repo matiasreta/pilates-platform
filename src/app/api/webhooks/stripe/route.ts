@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import Stripe from 'stripe'
 
 // Disable body parsing, need raw body for signature verification
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 })
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     try {
         switch (event.type) {
@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
                     status: subscription.status,
                     price_id: subscription.items.data[0].price.id,
                     current_period_end: currentPeriodEnd,
+                    cancel_at_period_end: subData.cancel_at_period_end || false,
                 })
 
                 if (error) {
@@ -119,6 +120,7 @@ export async function POST(req: NextRequest) {
                     .from('subscriptions')
                     .update({
                         current_period_end: currentPeriodEnd,
+                        cancel_at_period_end: subData.cancel_at_period_end || false,
                     })
                     .eq('stripe_subscription_id', subscription.id)
 
@@ -139,23 +141,55 @@ export async function POST(req: NextRequest) {
                     break
                 }
 
-                // Get current_period_end safely
-                const periodEnd = (subscription as any).current_period_end
-                const currentPeriodEnd = periodEnd ? new Date(periodEnd * 1000).toISOString() : null
+                // To be absolutely sure we have the latest data, let's fetch it directly
+                const latestSubscription = await stripe.subscriptions.retrieve(subscription.id)
+
+                // Safe extraction for this specific API version which might be missing root properties
+                const rawSub = latestSubscription as any
+
+                // 1. Get current_period_end (fallback to first item if missing at root)
+                let currentPeriodEndVal = rawSub.current_period_end
+                if (!currentPeriodEndVal && rawSub.items?.data?.[0]?.current_period_end) {
+                    currentPeriodEndVal = rawSub.items.data[0].current_period_end
+                }
+
+                const currentPeriodEnd = currentPeriodEndVal
+                    ? new Date(currentPeriodEndVal * 1000).toISOString()
+                    : null
+
+                // 2. Determine cancellation status
+                // If cancel_at_period_end is explicitly true, trust it.
+                // If cancel_at is set to a future date, it means it IS canceling (at that date).
+                const explicitCancel = rawSub.cancel_at_period_end === true
+                const scheduledCancel = rawSub.cancel_at !== null && rawSub.cancel_at !== undefined
+
+                // We consider it "cancelled at period end" if either flag is true OR if it's scheduled to cancel
+                const cancelAtPeriodEnd = explicitCancel || scheduledCancel
+
+                console.log('🔄 Subscription Update:', {
+                    id: latestSubscription.id,
+                    current_period_end: currentPeriodEnd,
+                    is_canceling: cancelAtPeriodEnd,
+                    source: {
+                        explicit_flag: explicitCancel,
+                        scheduled_cancel: scheduledCancel
+                    }
+                })
 
                 // Update subscription in Supabase
                 const { error } = await supabase
                     .from('subscriptions')
                     .update({
-                        status: subscription.status,
+                        status: rawSub.status,
                         current_period_end: currentPeriodEnd,
+                        cancel_at_period_end: cancelAtPeriodEnd,
                     })
-                    .eq('stripe_subscription_id', subscription.id)
+                    .eq('stripe_subscription_id', latestSubscription.id)
 
                 if (error) {
                     console.error('Error updating subscription:', error)
                 } else {
-                    console.log('✅ Subscription updated for user:', userId, '- Status:', subscription.status)
+                    console.log('✅ Subscription updated for user:', userId, '- Cancel state:', cancelAtPeriodEnd)
                 }
                 break
             }

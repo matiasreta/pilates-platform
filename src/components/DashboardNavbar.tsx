@@ -146,14 +146,17 @@ export default function DashboardNavbar({ userEmail, subscription }: DashboardNa
                                 </div>
                                 <p className="text-sm font-medium text-gray-900">
                                     {!subscription && 'Sin suscripción activa'}
-                                    {subscription?.status === 'active' && subscription?.current_period_end &&
+                                    {subscription?.status === 'active' && !subscription?.cancel_at_period_end && subscription?.current_period_end &&
                                         `Renovación: ${new Date(subscription.current_period_end).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}`
+                                    }
+                                    {subscription?.status === 'active' && subscription?.cancel_at_period_end && subscription?.current_period_end &&
+                                        `Acceso hasta: ${new Date(subscription.current_period_end).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} (Cancelada)`
                                     }
                                     {subscription?.status === 'trialing' && subscription?.current_period_end &&
                                         `Prueba hasta: ${new Date(subscription.current_period_end).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}`
                                     }
                                     {subscription?.status === 'canceled' && subscription?.current_period_end &&
-                                        `Finaliza: ${new Date(subscription.current_period_end).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}`
+                                        `Finalizó: ${new Date(subscription.current_period_end).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}`
                                     }
                                     {subscription?.status === 'past_due' &&
                                         'Pago pendiente - Actualiza tu método de pago'
