@@ -215,9 +215,11 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
                             <p className="text-sm text-purple-100 mb-4">
                                 Explora nuestros videos de pilates
                             </p>
-                            <button className="bg-white text-purple-600 px-4 py-2 rounded-lg text-sm font-medium hover:shadow-lg transition-all">
-                                Ver Videos
-                            </button>
+                            <Link href="/videos">
+                                <button className="bg-white text-purple-600 px-4 py-2 rounded-lg text-sm font-medium hover:shadow-lg transition-all">
+                                    Ver Videos
+                                </button>
+                            </Link>
                         </motion.div>
                     </div>
 
