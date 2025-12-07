@@ -33,7 +33,10 @@ export default function Navbar() {
                             {link.name}
                         </Link>
                     ))}
-                    <Link href="/login" className="btn-secondary">
+                    <Link
+                        href="/login"
+                        className="bg-white text-black px-5 py-2 rounded text-sm font-medium transition-colors hover:bg-gray-100"
+                    >
                         Login
                     </Link>
                 </div>
@@ -61,7 +64,11 @@ export default function Navbar() {
                                 {link.name}
                             </Link>
                         ))}
-                        <Link href="/login" className="btn-secondary" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link
+                            href="/login"
+                            className="bg-white text-black px-5 py-2 rounded text-sm font-medium transition-colors hover:bg-gray-100"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
                             Login
                         </Link>
                     </div>
