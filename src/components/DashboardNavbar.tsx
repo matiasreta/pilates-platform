@@ -99,7 +99,7 @@ export default function DashboardNavbar({ userEmail, subscription }: DashboardNa
     const status = getSubscriptionStatus();
 
     return (
-        <nav className="w-full bg-[#262422] py-4">
+        <nav className="w-full bg-[#262422] py-4 relative z-30">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8">
                 {/* Logo */}
                 <Link href="/dashboard" className="text-2xl font-bold tracking-tight text-white">
@@ -118,7 +118,7 @@ export default function DashboardNavbar({ userEmail, subscription }: DashboardNa
 
                     {/* Dropdown Menu */}
                     {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
+                        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50">
                             {/* User Email */}
                             <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
                                 <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Cuenta</p>
