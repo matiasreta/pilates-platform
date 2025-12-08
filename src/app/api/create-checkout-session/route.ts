@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
             PRICE_ID,
             user.id,
             `${origin}/dashboard?success=true`,
-            `${origin}/pricing?canceled=true`
+            `${origin}/?canceled=true`
         )
 
         return NextResponse.json({ url: checkoutUrl })

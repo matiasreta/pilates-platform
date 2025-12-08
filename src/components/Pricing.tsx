@@ -16,7 +16,7 @@ const features = [
 
 export default function Pricing() {
     return (
-        <section className="relative bg-gradient-to-b from-[#DCD8D3]/30 to-white py-12 lg:py-16">
+        <section id="pricing" className="relative bg-gradient-to-b from-[#DCD8D3]/30 to-white py-12 lg:py-16">
             <div className="mx-auto max-w-6xl px-6 lg:px-8">
                 <div className="grid gap-8 lg:grid-cols-2 lg:gap-10 items-center">
                     {/* Pricing Card */}
@@ -68,7 +68,7 @@ export default function Pricing() {
                         </ul>
 
                         {/* CTA Button */}
-                        <Link href="/pricing">
+                        <Link href="/login">
                             <motion.button
                                 initial={{ opacity: 0 }}
                                 whileInView={{ opacity: 1 }}
@@ -76,7 +76,7 @@ export default function Pricing() {
                                 transition={{ duration: 0.5, delay: 0.5 }}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="btn-primary w-full"
+                                className="btn-primary w-full flex items-center justify-center gap-2"
                             >
                                 Comenzar Ahora
                             </motion.button>

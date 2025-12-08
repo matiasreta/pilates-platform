@@ -67,7 +67,7 @@ export default function VideosPageClient({ hasActiveSubscription, userEmail }: V
                     <p className="text-gray-600 mb-6">
                         Necesitas una suscripción activa para acceder a los videos
                     </p>
-                    <Link href="/pricing">
+                    <Link href="/#pricing">
                         <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-[1.02] transition-all w-full">
                             Ver Planes
                         </button>
@@ -118,8 +118,8 @@ export default function VideosPageClient({ hasActiveSubscription, userEmail }: V
                                 key={cat}
                                 onClick={() => setFilter(cat)}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${filter === cat
-                                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                                    : 'bg-white text-gray-700 hover:bg-gray-50'
                                     }`}
                             >
                                 {cat === 'all' ? 'Todos' : cat}

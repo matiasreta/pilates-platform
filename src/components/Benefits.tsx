@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Heart, Baby, Sparkles, Shield } from 'lucide-react';
@@ -89,17 +90,19 @@ export default function Benefits() {
                         </div>
 
                         {/* CTA */}
-                        <motion.button
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 0.8 }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="btn-primary mt-6"
-                        >
-                            Explorar Programas
-                        </motion.button>
+                        <Link href="/#pricing">
+                            <motion.button
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: 0.8 }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="btn-primary mt-6"
+                            >
+                                Explorar Programas
+                            </motion.button>
+                        </Link>
                     </motion.div>
                 </div>
             </div>

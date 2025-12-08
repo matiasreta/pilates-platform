@@ -100,6 +100,32 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
 
     const status = getSubscriptionStatus()
 
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    const handleSubscribe = async () => {
+        setLoading(true)
+        setError(null)
+
+        try {
+            const response = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Error al crear la sesión de pago')
+            }
+
+            // Redirect to Stripe Checkout
+            window.location.href = data.url
+        } catch (err: any) {
+            setError(err.message)
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
             {/* Header */}
@@ -248,11 +274,27 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
                                 <p className="text-gray-600 mb-6">
                                     Necesitas una suscripción activa para acceder a los videos
                                 </p>
-                                <Link href="/pricing">
-                                    <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-[1.02] transition-all">
-                                        Suscribirme Ahora
-                                    </button>
-                                </Link>
+
+                                {error && (
+                                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-lg text-sm mb-4 max-w-sm mx-auto">
+                                        {error}
+                                    </div>
+                                )}
+
+                                <button
+                                    onClick={handleSubscribe}
+                                    disabled={loading}
+                                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto"
+                                >
+                                    {loading ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                            Procesando...
+                                        </>
+                                    ) : (
+                                        'Suscribirme Ahora'
+                                    )}
+                                </button>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

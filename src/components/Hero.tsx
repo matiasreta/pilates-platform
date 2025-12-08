@@ -30,7 +30,7 @@ export default function Hero() {
                         y conexión con su cuerpo a través de la práctica de pilates.
                     </p>
 
-                    <Link href="/login">
+                    <Link href="/#pricing">
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
