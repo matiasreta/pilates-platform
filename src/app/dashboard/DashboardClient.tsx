@@ -15,7 +15,6 @@ interface Video {
     id: number
     title: string
     duration: string
-    completed: boolean
     description?: string
 }
 
@@ -61,12 +60,11 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
                     id: 1, 
                     title: 'Introducción al pilates prenatal', 
                     duration: '8 min', 
-                    completed: true,
                     description: 'En esta sesión trabajaremos ejercicios específicamente diseñados para el primer trimestre de tu embarazo. Nos enfocaremos en establecer una conexión consciente con tu cuerpo y comenzar a fortalecer los músculos que te acompañarán durante toda esta etapa. Aprenderás las bases del pilates prenatal: respiración diafragmática, activación del suelo pélvico y movimientos seguros que podrás practicar durante todo tu embarazo. Recuerda escuchar a tu cuerpo en todo momento. Si algo no se siente bien, simplemente detente y descansa.'
                 },
-                { id: 2, title: 'Respiración y conexión', duration: '12 min', completed: true },
-                { id: 3, title: 'Ejercicios de suelo pélvico', duration: '15 min', completed: false },
-                { id: 4, title: 'Movilidad de columna', duration: '18 min', completed: false },
+                { id: 2, title: 'Respiración y conexión', duration: '12 min' },
+                { id: 3, title: 'Ejercicios de suelo pélvico', duration: '15 min' },
+                { id: 4, title: 'Movilidad de columna', duration: '18 min' },
             ]
         },
         {
@@ -75,9 +73,9 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
             weeks: '13-27',
             progress: 0,
             videos: [
-                { id: 5, title: 'Fortalecimiento de espalda', duration: '16 min', completed: false },
-                { id: 6, title: 'Ejercicios de equilibrio', duration: '14 min', completed: false },
-                { id: 7, title: 'Trabajo de brazos y hombros', duration: '18 min', completed: false },
+                { id: 5, title: 'Fortalecimiento de espalda', duration: '16 min' },
+                { id: 6, title: 'Ejercicios de equilibrio', duration: '14 min' },
+                { id: 7, title: 'Trabajo de brazos y hombros', duration: '18 min' },
             ]
         },
         {
@@ -86,9 +84,9 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
             weeks: '28-40',
             progress: 0,
             videos: [
-                { id: 8, title: 'Preparación para el parto', duration: '20 min', completed: false },
-                { id: 9, title: 'Ejercicios de apertura pélvica', duration: '16 min', completed: false },
-                { id: 10, title: 'Respiración para el parto', duration: '14 min', completed: false },
+                { id: 8, title: 'Preparación para el parto', duration: '20 min' },
+                { id: 9, title: 'Ejercicios de apertura pélvica', duration: '16 min' },
+                { id: 10, title: 'Respiración para el parto', duration: '14 min' },
             ]
         }
     ]
@@ -266,41 +264,28 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
                                                         <button
                                                             key={video.id}
                                                             onClick={() => setSelectedVideo(video.id)}
-                                                            className={`w-full px-4 sm:px-5 lg:px-6 py-3 sm:py-3.5 lg:py-4 flex items-start gap-3 sm:gap-4 hover:bg-white border-l-4 transition-colors ${
+                                                            className={`w-full px-4 sm:px-5 lg:px-6 py-3 sm:py-3.5 lg:py-4 flex items-start gap-3 sm:gap-4 hover:bg-gray-50 transition-colors ${
                                                                 isSelected 
-                                                                    ? 'border-l-blue-500 bg-white' 
-                                                                    : 'border-l-transparent'
+                                                                    ? 'bg-gray-100' 
+                                                                    : ''
                                                             }`}
                                                         >
-                                                            {/* Checkbox/número */}
+                                                            {/* Número */}
                                                             <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
-                                                                {video.completed ? (
-                                                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-semibold">
-                                                                        ✓
-                                                                    </div>
-                                                                ) : (
-                                                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs text-gray-500">
-                                                                        {index + 1}
-                                                                    </div>
-                                                                )}
+                                                                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs text-gray-500">
+                                                                    {index + 1}
+                                                                </div>
                                                             </div>
 
                                                             {/* Info del video */}
                                                             <div className="flex-1 text-left">
-                                                                <h4 className={`text-xs sm:text-sm font-medium ${isSelected ? 'text-blue-600' : 'text-gray-900'}`}>
+                                                                <h6 className={`text-xs sm:text-sm font-medium ${isSelected ? 'text-blue-600' : 'text-gray-900'}`}>
                                                                     {video.title}
-                                                                </h4>
+                                                                </h6>
                                                                 <div className="text-xs text-gray-500 mt-0.5 sm:mt-1">
                                                                     {video.duration}
                                                                 </div>
                                                             </div>
-
-                                                            {/* Play icon */}
-                                                            {isSelected && (
-                                                                <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs">
-                                                                    ▶
-                                                                </div>
-                                                            )}
                                                         </button>
                                                     )
                                                 })}
@@ -316,17 +301,17 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
                     <div className="flex-1 overflow-y-auto">
                         <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
                             {/* Video player placeholder */}
-                            <div className="bg-gray-900 rounded-lg aspect-video flex items-center justify-center mb-4 sm:mb-6">
+                            <div className="bg-gray-900 rounded-lg h-64 sm:h-72 lg:h-80 w-full flex items-center justify-center mb-4 sm:mb-6">
                                 <div className="text-center text-white">
                                     <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center mx-auto mb-2 sm:mb-3">
-                                        <span className="text-xl sm:text-2xl">▶</span>
+                                        <span className="text-xl sm:text-2xl text-black">▶</span>
                                     </div>
                                     <p className="text-xs sm:text-sm">Video Player</p>
                                 </div>
                             </div>
 
                             {/* Título del video */}
-                            <h1 className="text-xl sm:text-2xl lg:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">{selectedVideoData.title}</h1>
+                            <h6 className="text-xl sm:text-2xl lg:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">{selectedVideoData.title}</h6>
 
                             {/* Descripción */}
                             <div className="text-sm sm:text-base text-gray-700 mb-6 sm:mb-8">
@@ -343,7 +328,7 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
 
                             {/* Comentarios */}
                             <div className="border-t border-gray-200 pt-4 sm:pt-6">
-                                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Comentarios</h2>
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Comentarios</h4>
                                 <div className="space-y-3 sm:space-y-4">
                                     <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
                                         <div className="flex items-start gap-2 sm:gap-3 mb-2">
