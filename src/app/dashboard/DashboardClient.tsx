@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { User } from '@supabase/supabase-js'
 import { useState, useEffect } from 'react'
+import { Check } from 'lucide-react'
 
 interface DashboardClientProps {
     user: User
@@ -153,71 +154,148 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
             )}
 
             {!subscription || subscription.status !== 'active' ? (
-                /* Locked Content View */
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        {/* Welcome Section */}
-                        <div className="mb-6 sm:mb-8">
-                            <h2 className="text-xl sm:text-2xl lg:text-2xl font-bold text-gray-900 mb-2">
-                                ¡Hola, {profile?.full_name || 'Usuario'}! 👋
-                            </h2>
-                            <p className="text-sm sm:text-base text-gray-600">
-                                Bienvenida a tu panel de control
-                            </p>
+                /* Locked Content View with Skeleton */
+                <div className="flex flex-col md:flex-row h-[calc(100vh-4rem)] bg-gray-50">
+                    {/* Sidebar Skeleton */}
+                    <div className="w-full md:w-72 lg:w-80 xl:w-96 bg-white border-r border-gray-200 overflow-y-auto flex-shrink-0">
+                        {/* Header Skeleton */}
+                        <div className="p-4 sm:p-5 lg:p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+                            <div className="h-6 bg-gray-200 rounded-lg w-3/4 mb-2 animate-pulse"></div>
+                            <div className="h-4 bg-gray-200 rounded-lg w-1/2 animate-pulse"></div>
                         </div>
 
-                        {/* Content Section */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8"
-                        >
-                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">
-                                Tu Contenido
-                            </h3>
-
-                            <div className="text-center py-8 sm:py-12">
-                                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-600 sm:w-8 sm:h-8">
-                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                    </svg>
-                                </div>
-                                <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
-                                    Contenido Bloqueado
-                                </h4>
-                                <p className="text-sm sm:text-base text-gray-600 mb-6">
-                                    Necesitas una suscripción activa para acceder a los videos
-                                </p>
-
-                                {error && (
-                                    <div className="bg-red-50 border border-red-200 text-red-600 px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm mb-4 max-w-sm mx-auto">
-                                        {error}
+                        {/* Trimester List Skeleton */}
+                        <div>
+                            {[1, 2, 3].map((trimester) => (
+                                <div key={trimester} className="border-b border-gray-100">
+                                    <div className="px-4 sm:px-5 lg:px-6 py-3 sm:py-3.5 lg:py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-4 h-4 bg-gray-200 rounded animate-pulse"></div>
+                                            <div className="flex-1">
+                                                <div className="h-4 bg-gray-200 rounded-lg w-2/3 mb-2 animate-pulse"></div>
+                                                <div className="h-3 bg-gray-200 rounded-lg w-1/3 animate-pulse"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                )}
+                                    {/* Video items skeleton */}
+                                    <div className="bg-gray-50 pl-8 pr-4 pb-2">
+                                        {[1, 2, 3].map((video) => (
+                                            <div key={video} className="py-3 flex items-start gap-3">
+                                                <div className="w-6 h-6 bg-gray-200 rounded-full animate-pulse"></div>
+                                                <div className="flex-1">
+                                                    <div className="h-3 bg-gray-200 rounded-lg w-full mb-2 animate-pulse"></div>
+                                                    <div className="h-3 bg-gray-200 rounded-lg w-1/4 animate-pulse"></div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-                                <button
-                                    onClick={handleSubscribe}
-                                    disabled={loading}
-                                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl text-sm sm:text-base font-semibold hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                                            Procesando...
-                                        </>
-                                    ) : (
-                                        'Suscribirme Ahora'
-                                    )}
-                                </button>
+                    {/* Main Area with Locked Content */}
+                    <div className="flex-1 overflow-y-auto relative">
+                        <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 relative">
+                            {/* Video Player Skeleton */}
+                            <div className="bg-gray-900 rounded-lg h-64 sm:h-72 lg:h-80 w-full flex items-center justify-center mb-4 sm:mb-6 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gray-800 animate-pulse"></div>
+                                <div className="relative z-10 text-center">
+                                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white opacity-50">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
-                        </motion.div>
-                    </motion.div>
+
+                            {/* Title Skeleton */}
+                            <div className="h-7 bg-gray-200 rounded-lg w-3/4 mb-4 sm:mb-6 animate-pulse"></div>
+
+                            {/* Description Skeleton */}
+                            <div className="space-y-3 mb-6 sm:mb-8">
+                                <div className="h-4 bg-gray-200 rounded-lg w-full animate-pulse"></div>
+                                <div className="h-4 bg-gray-200 rounded-lg w-full animate-pulse"></div>
+                                <div className="h-4 bg-gray-200 rounded-lg w-5/6 animate-pulse"></div>
+                            </div>
+
+                            {/* Locked Content Overlay */}
+                            <div className="fixed inset-0 md:absolute md:inset-0 flex items-center justify-center bg-white/95 backdrop-blur-sm z-20 p-4">
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="relative rounded-lg bg-white border-2 border-[#DCD8D3] p-6 sm:p-8 max-w-md w-full"
+                                >
+                                    {/* Plan Header */}
+                                    <div className="text-center mb-6">
+                                        <h3 className="text-2xl font-bold mb-2 text-[#333333] font-[family-name:var(--font-poppins)]">
+                                            Membresía Mensual
+                                        </h3>
+
+                                        {/* Price */}
+                                        <div className="mb-2">
+                                            <span className="text-5xl font-bold text-[#986C4A] font-[family-name:var(--font-poppins)]">
+                                                $29
+                                            </span>
+                                        </div>
+
+                                        <p className="text-sm text-[#333333]/70 font-[family-name:var(--font-inter)]">
+                                            por mes • Cancela cuando quieras
+                                        </p>
+                                    </div>
+
+                                    {/* Features List */}
+                                    <ul className="space-y-3 mb-6">
+                                        {[
+                                            'Acceso ilimitado a más de 200 videos organizados por trimestre',
+                                            'Rutinas semanales adaptadas a cada etapa del embarazo',
+                                            'Videos nuevos cada semana con ejercicios específicos',
+                                            'Guías descargables de ejercicios y recomendaciones',
+                                            'Acceso desde cualquier dispositivo, en cualquier momento',
+                                            'Sesiones de 15 a 45 minutos para adaptarse a tu agenda',
+                                        ].map((feature) => (
+                                            <li
+                                                key={feature}
+                                                className="flex items-start gap-3"
+                                            >
+                                                <Check
+                                                    className="w-5 h-5 shrink-0 mt-0.5 text-[#986C4A]"
+                                                    strokeWidth={2.5}
+                                                />
+                                                <span className="text-sm text-[#333333]/80 font-[family-name:var(--font-inter)]">
+                                                    {feature}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    {error && (
+                                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-lg text-sm mb-4">
+                                            {error}
+                                        </div>
+                                    )}
+
+                                    {/* CTA Button */}
+                                    <button
+                                        onClick={handleSubscribe}
+                                        disabled={loading}
+                                        className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                                Procesando...
+                                            </>
+                                        ) : (
+                                            'Desbloquear Contenido'
+                                        )}
+                                    </button>
+                                </motion.div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             ) : (
                 /* Video Content View */
