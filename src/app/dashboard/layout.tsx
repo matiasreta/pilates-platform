@@ -27,11 +27,9 @@ export default async function DashboardLayout({
     }
 
     return (
-        <>
+        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
             <DashboardNavbar userEmail={user?.email} subscription={subscription} />
-            <main className="pt-16">
-                {children}
-            </main>
-        </>
+            {children}
+        </div>
     );
 }

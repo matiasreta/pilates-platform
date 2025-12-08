@@ -1,7 +1,6 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { User } from '@supabase/supabase-js'
 import { useState, useEffect } from 'react'
@@ -14,9 +13,7 @@ interface DashboardClientProps {
 }
 
 export default function DashboardClient({ user, profile, subscription }: DashboardClientProps) {
-    const router = useRouter()
     const searchParams = useSearchParams()
-    const supabase = createClient()
     const [showSuccess, setShowSuccess] = useState(false)
     const [managingSubscription, setManagingSubscription] = useState(false)
 
@@ -32,12 +29,6 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
             setTimeout(() => setShowSuccess(false), 5000)
         }
     }, [searchParams])
-
-    const handleSignOut = async () => {
-        await supabase.auth.signOut()
-        router.push('/login')
-        router.refresh()
-    }
 
     const handleManageSubscription = async () => {
         setManagingSubscription(true)
@@ -127,26 +118,9 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
-            {/* Header */}
-            <header className="bg-white/80 backdrop-blur-lg border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                            Pilates Platform
-                        </h1>
-                        <button
-                            onClick={handleSignOut}
-                            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
-                        >
-                            Cerrar Sesión
-                        </button>
-                    </div>
-                </div>
-            </header>
-
+        <>
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -306,7 +280,7 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
                         )}
                     </motion.div>
                 </motion.div>
-            </main>
-        </div>
+            </div>
+        </>
     )
 }
