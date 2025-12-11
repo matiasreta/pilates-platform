@@ -2,14 +2,21 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Hero() {
     return (
         <section className="relative h-screen w-full overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0">
-
-
+                <Image
+                    src="/hero-bg-new.png"
+                    alt="Background"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                />
+                <div className="absolute inset-0 bg-white/10" />
             </div>
 
             {/* Content */}
