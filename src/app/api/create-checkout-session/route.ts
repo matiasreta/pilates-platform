@@ -30,18 +30,42 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'User email not found' }, { status: 400 })
         }
 
-        // Check if user already has an active subscription
-        const { data: existingSubscription } = await supabase
-            .from('subscriptions')
-            .select('status')
-            .eq('user_id', user.id)
-            .single()
+        // Check for specific price ID in body (for one-time payments)
+        const body = await req.json().catch(() => ({}))
+        const isOneTimePayment = !!body.priceId
+        const targetPriceId = body.priceId || PRICE_ID
+        const mode = isOneTimePayment ? 'payment' : 'subscription'
 
-        if (existingSubscription && existingSubscription.status === 'active') {
-            return NextResponse.json(
-                { error: 'Ya tienes una suscripción activa' },
-                { status: 400 }
-            )
+        // Validation logic
+        if (isOneTimePayment) {
+            // Check if user already purchased this specific product
+            const { data: existingPurchase } = await supabase
+                .from('one_time_purchases')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('stripe_price_id', targetPriceId)
+                .single()
+
+            if (existingPurchase) {
+                return NextResponse.json(
+                    { error: 'Ya compraste este contenido' },
+                    { status: 400 }
+                )
+            }
+        } else {
+            // Default subscription check
+            const { data: existingSubscription } = await supabase
+                .from('subscriptions')
+                .select('status')
+                .eq('user_id', user.id)
+                .single()
+
+            if (existingSubscription && existingSubscription.status === 'active') {
+                return NextResponse.json(
+                    { error: 'Ya tienes una suscripción activa' },
+                    { status: 400 }
+                )
+            }
         }
 
         // Get or create Stripe customer
@@ -51,10 +75,11 @@ export async function POST(req: NextRequest) {
         const origin = req.headers.get('origin') || 'http://localhost:3000'
         const checkoutUrl = await createCheckoutSession(
             customerId,
-            PRICE_ID,
+            targetPriceId,
             user.id,
             `${origin}/dashboard?success=true`,
-            `${origin}/?canceled=true`
+            `${origin}/?canceled=true`,
+            mode
         )
 
         return NextResponse.json({ url: checkoutUrl })

@@ -12,11 +12,13 @@ interface DashboardClientProps {
     user: User
     profile: any
     subscription: any
+    products: any[]
+    purchases: any[]
 }
 
 type TabType = 'planes' | 'guias' | 'libros'
 
-export default function DashboardClient({ user, profile, subscription }: DashboardClientProps) {
+export default function DashboardClient({ user, profile, subscription, products, purchases }: DashboardClientProps) {
     const [activeTab, setActiveTab] = useState<TabType>('planes')
 
     return (
@@ -60,7 +62,7 @@ export default function DashboardClient({ user, profile, subscription }: Dashboa
                             <SuscripcionVacaciones />
                         </div>
                     )}
-                    {activeTab === 'guias' && <Guias />}
+                    {activeTab === 'guias' && <Guias products={products} purchases={purchases} />}
                     {activeTab === 'libros' && <Libros />}
                 </motion.div>
             </div>

@@ -45,11 +45,12 @@ export async function createCheckoutSession(
     priceId: string,
     userId: string,
     successUrl: string,
-    cancelUrl: string
+    cancelUrl: string,
+    mode: 'subscription' | 'payment' = 'subscription'
 ): Promise<string> {
-    const session = await stripe.checkout.sessions.create({
+    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
         customer: customerId,
-        mode: 'subscription',
+        mode: mode,
         payment_method_types: ['card'],
         line_items: [
             {
@@ -61,13 +62,26 @@ export async function createCheckoutSession(
         cancel_url: cancelUrl,
         metadata: {
             user_id: userId,
+            price_id: priceId, // Store price_id in metadata for easier retrieval in webhooks
         },
-        subscription_data: {
+    }
+
+    if (mode === 'subscription') {
+        sessionConfig.subscription_data = {
             metadata: {
                 user_id: userId,
             },
-        },
-    })
+        }
+    } else {
+        sessionConfig.payment_intent_data = {
+            metadata: {
+                user_id: userId,
+                price_id: priceId,
+            },
+        }
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig)
 
     return session.url!
 }

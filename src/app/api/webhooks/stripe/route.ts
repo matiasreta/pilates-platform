@@ -28,16 +28,40 @@ export async function POST(req: NextRequest) {
         switch (event.type) {
             case 'checkout.session.completed': {
                 const session = event.data.object as Stripe.Checkout.Session
-
-                // Get subscription details
-                const subscriptionId = session.subscription as string
-                const customerId = session.customer as string
                 const userId = session.metadata?.user_id
 
                 if (!userId) {
                     console.error('No user_id in session metadata')
                     break
                 }
+
+                if (session.mode === 'payment') {
+                    // Handle One-Time Payment
+                    const priceId = session.metadata?.price_id
+
+                    if (priceId) {
+                        const { error } = await supabase.from('one_time_purchases').insert({
+                            user_id: userId,
+                            stripe_price_id: priceId,
+                            stripe_checkout_session_id: session.id,
+                            status: 'completed'
+                        })
+
+                        if (error) {
+                            console.error('Error creating one-time purchase:', error)
+                        } else {
+                            console.log('✅ One-time purchase recorded for user:', userId, 'Price:', priceId)
+                        }
+                    } else {
+                        console.error('No price_id found in metadata for one-time payment')
+                    }
+
+                    break
+                }
+
+                // Handle Subscription (Existing Logic)
+                const subscriptionId = session.subscription as string
+                const customerId = session.customer as string
 
                 // Get full subscription object with expanded data
                 const subscription = await stripe.subscriptions.retrieve(subscriptionId, {

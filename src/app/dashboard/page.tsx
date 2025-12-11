@@ -27,5 +27,34 @@ export default async function DashboardPage() {
         .eq('user_id', user.id)
         .single()
 
-    return <DashboardClient user={user} profile={profile} subscription={subscription} />
+    // Get available products
+    const { data: products, error: productsError } = await supabase
+        .from('products')
+        .select('*')
+
+    if (productsError) {
+        console.error('Error fetching products:', productsError)
+    } else {
+        console.log('Server-side products fetched:', products)
+    }
+
+    // Get user one-time purchases
+    const { data: purchases, error: purchasesError } = await supabase
+        .from('one_time_purchases')
+        .select('*')
+        .eq('user_id', user.id)
+
+    if (purchasesError) {
+        console.error('Error fetching purchases:', purchasesError)
+    } else {
+        console.log('Server-side purchases fetched:', purchases)
+    }
+
+    return <DashboardClient
+        user={user}
+        profile={profile}
+        subscription={subscription}
+        products={products || []}
+        purchases={purchases || []}
+    />
 }
