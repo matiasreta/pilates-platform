@@ -1,15 +1,16 @@
 import crypto from 'crypto'
 
-// Cloudflare Stream configuration
-const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID!
-const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN!
-const CLOUDFLARE_STREAM_CUSTOMER_CODE = process.env.CLOUDFLARE_STREAM_CUSTOMER_CODE!
+// Helper to check credentials lazily
+function checkCredentials() {
+    const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+    const apiToken = process.env.CLOUDFLARE_API_TOKEN
 
-if (!CLOUDFLARE_ACCOUNT_ID || !CLOUDFLARE_API_TOKEN) {
-    throw new Error('Cloudflare Stream credentials not configured')
+    if (!accountId || !apiToken) {
+        throw new Error('Cloudflare Stream credentials not configured')
+    }
+
+    return { accountId, apiToken }
 }
-
-const STREAM_API_BASE = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/stream`
 
 /**
  * Generate a signed URL for Cloudflare Stream video
@@ -19,9 +20,12 @@ export function generateSignedUrl(
     videoId: string,
     expiresIn: number = 3600 // 1 hour default
 ): string {
-    if (!CLOUDFLARE_STREAM_CUSTOMER_CODE) {
+    const { accountId } = checkCredentials()
+    const customerCode = process.env.CLOUDFLARE_STREAM_CUSTOMER_CODE
+
+    if (!customerCode) {
         // If no signing key, return basic URL (less secure)
-        return `https://customer-${CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${videoId}/manifest/video.m3u8`
+        return `https://customer-${accountId}.cloudflarestream.com/${videoId}/manifest/video.m3u8`
     }
 
     const expiration = Math.floor(Date.now() / 1000) + expiresIn
@@ -29,20 +33,23 @@ export function generateSignedUrl(
 
     // Create signature using customer code as key
     const signature = crypto
-        .createHmac('sha256', CLOUDFLARE_STREAM_CUSTOMER_CODE)
+        .createHmac('sha256', customerCode)
         .update(toSign)
         .digest('base64url')
 
-    return `https://customer-${CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${videoId}/manifest/video.m3u8?token=${signature}&expires=${expiration}`
+    return `https://customer-${accountId}.cloudflarestream.com/${videoId}/manifest/video.m3u8?token=${signature}&expires=${expiration}`
 }
 
 /**
  * Get video details from Cloudflare Stream
  */
 export async function getVideoDetails(videoId: string) {
-    const response = await fetch(`${STREAM_API_BASE}/${videoId}`, {
+    const { accountId, apiToken } = checkCredentials()
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/stream`
+
+    const response = await fetch(`${baseUrl}/${videoId}`, {
         headers: {
-            'Authorization': `Bearer ${CLOUDFLARE_API_TOKEN}`,
+            'Authorization': `Bearer ${apiToken}`,
         },
     })
 
@@ -58,9 +65,12 @@ export async function getVideoDetails(videoId: string) {
  * List all videos from Cloudflare Stream
  */
 export async function listVideos() {
-    const response = await fetch(STREAM_API_BASE, {
+    const { accountId, apiToken } = checkCredentials()
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/stream`
+
+    const response = await fetch(baseUrl, {
         headers: {
-            'Authorization': `Bearer ${CLOUDFLARE_API_TOKEN}`,
+            'Authorization': `Bearer ${apiToken}`,
         },
     })
 
@@ -76,12 +86,16 @@ export async function listVideos() {
  * Get thumbnail URL for a video
  */
 export function getThumbnailUrl(videoId: string): string {
-    return `https://customer-${CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg`
+    const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+    if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID not configured')
+    return `https://customer-${accountId}.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg`
 }
 
 /**
  * Get embed URL for Cloudflare Stream Player
  */
 export function getEmbedUrl(videoId: string): string {
-    return `https://customer-${CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${videoId}/iframe`
+    const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+    if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID not configured')
+    return `https://customer-${accountId}.cloudflarestream.com/${videoId}/iframe`
 }
