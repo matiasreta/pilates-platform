@@ -118,11 +118,9 @@ export default function SuscripcionPrenatal({ user, subscription }: SuscripcionP
                     onClick={isSubscribed ? () => { } : handleSubscribe}
                     disabled={loading}
                     className={`
+                        cursor-pointer
                         w-full py-2.5 px-4 rounded-lg text-sm font-semibold transition-all
-                        ${isSubscribed
-                            ? 'bg-[#986C4A] text-white hover:bg-[#7d593d]'
-                            : 'bg-[#333333] text-white hover:bg-black'
-                        }
+                        bg-[#333333] text-white hover:bg-black
                         disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2
                     `}
                 >
