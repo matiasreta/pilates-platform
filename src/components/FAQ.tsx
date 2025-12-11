@@ -39,7 +39,7 @@ export default function FAQ() {
     };
 
     return (
-        <section className="relative bg-white py-12 lg:py-16">
+        <section className="relative bg-gradient-to-b from-[#FFFBF8] to-[#FFFFFF] py-12 lg:py-16">
             <div className="mx-auto max-w-3xl px-6 lg:px-8">
                 {/* Header */}
                 <motion.div

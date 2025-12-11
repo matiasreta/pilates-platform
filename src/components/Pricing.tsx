@@ -25,7 +25,7 @@ export default function Pricing() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7 }}
-                        className="relative rounded-lg bg-white border-2 border-[#DCD8D3] p-8"
+                        className="relative rounded-lg bg-white border-2 border-[#751D68] p-8"
                     >
                         {/* Plan Header */}
                         <div className="text-center mb-6">
