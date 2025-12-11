@@ -295,6 +295,21 @@ h4 {
    BUTTON STYLES
    ============================================ */
 
+.btn-accent {
+  background-color: #751D68;
+  color: var(--color-blanco);
+  border: 1px solid var(--color-bronce-envejecido);
+  border-radius: var(--radius-sm);
+  padding: 16px 32px;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all var(--duration-base) var(--ease-out);
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
 .btn-primary {
   background-color: var(--color-bronce-envejecido);
   color: var(--color-blanco);

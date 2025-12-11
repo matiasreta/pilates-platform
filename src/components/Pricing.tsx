@@ -16,7 +16,7 @@ const features = [
 
 export default function Pricing() {
     return (
-        <section id="pricing" className="relative bg-gradient-to-b from-[#DCD8D3]/30 to-white py-12 lg:py-16">
+        <section id="pricing" className="relative bg-[#FFFBF8] py-12 lg:py-16">
             <div className="mx-auto max-w-6xl px-6 lg:px-8">
                 <div className="grid gap-8 lg:grid-cols-2 lg:gap-10 items-center">
                     {/* Pricing Card */}
@@ -30,12 +30,12 @@ export default function Pricing() {
                         {/* Plan Header */}
                         <div className="text-center mb-6">
                             <h3 className="text-2xl font-bold mb-2 text-[#333333] font-[family-name:var(--font-poppins)]">
-                                Membresía Mensual
+                                Plan Prenatal
                             </h3>
 
                             {/* Price */}
                             <div className="mb-2">
-                                <span className="text-5xl font-bold text-[#986C4A] font-[family-name:var(--font-poppins)]">
+                                <span className="text-5xl font-bold text-[#751D68] font-[family-name:var(--font-poppins)]">
                                     $29
                                 </span>
                             </div>
@@ -57,7 +57,7 @@ export default function Pricing() {
                                     className="flex items-start gap-3"
                                 >
                                     <Check
-                                        className="w-5 h-5 shrink-0 mt-0.5 text-[#986C4A]"
+                                        className="w-5 h-5 shrink-0 mt-0.5 text-[#751D68]"
                                         strokeWidth={2.5}
                                     />
                                     <span className="text-sm text-[#333333]/80 font-[family-name:var(--font-inter)]">
@@ -76,7 +76,7 @@ export default function Pricing() {
                                 transition={{ duration: 0.5, delay: 0.5 }}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="btn-primary w-full flex items-center justify-center gap-2"
+                                className="btn-accent w-full flex items-center justify-center gap-2"
                             >
                                 Comenzar Ahora
                             </motion.button>

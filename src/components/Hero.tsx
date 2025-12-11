@@ -10,8 +10,8 @@ export default function Hero() {
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
-                    src="/hero-bg-new.png"
-                    alt="Background"
+                    src="/hero-bg-latest.png"
+                    alt="Luciana instructora de pilates con pelota"
                     fill
                     className="object-cover object-center"
                     priority
