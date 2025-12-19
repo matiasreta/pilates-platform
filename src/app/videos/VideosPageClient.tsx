@@ -12,7 +12,7 @@ interface Video {
     thumbnail_url: string
     duration: number
     category: string
-    cloudflare_video_id: string
+    // cloudflare_video_id: string
 }
 
 interface VideosPageClientProps {
@@ -195,9 +195,7 @@ export default function VideosPageClient({ hasActiveSubscription, userEmail }: V
             {/* Video Player Modal */}
             {selectedVideo && (
                 <VideoPlayer
-                    videoId={selectedVideo.cloudflare_video_id}
                     title={selectedVideo.title}
-                    watermark={userEmail}
                     onClose={() => setSelectedVideo(null)}
                 />
             )}
