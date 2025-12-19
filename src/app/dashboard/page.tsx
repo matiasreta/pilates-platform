@@ -50,11 +50,28 @@ export default async function DashboardPage() {
         console.log('Server-side purchases fetched:', purchases)
     }
 
+    // Get videos if subscription is active
+    let videos = []
+    if (subscription && subscription.status === 'active') {
+        const { data: videosData, error: videosError } = await supabase
+            .from('videos')
+            .select('*')
+            .eq('is_published', true)
+            .order('created_at', { ascending: false })
+
+        if (videosError) {
+            console.error('Error fetching videos:', videosError)
+        } else {
+            videos = videosData || []
+        }
+    }
+
     return <DashboardClient
         user={user}
         profile={profile}
         subscription={subscription}
         products={products || []}
         purchases={purchases || []}
+        videos={videos}
     />
 }
