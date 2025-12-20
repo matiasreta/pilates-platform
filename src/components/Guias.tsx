@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
+import VideoPlayer from './VideoPlayer'
 
 interface GuiasProps {
     products?: any[]
@@ -41,17 +40,7 @@ export default function Guias({ products = [], purchases = [] }: GuiasProps) {
         }
     }
 
-    const getEmbedUrl = (url: string) => {
-        if (!url) return ''
-        // Basic YouTube embed conversion (assuming standard youtube.com/watch?v= format)
-        if (url.includes('youtube.com/watch?v=')) {
-            return url.replace('watch?v=', 'embed/')
-        }
-        if (url.includes('youtu.be/')) {
-            return url.replace('youtu.be/', 'youtube.com/embed/')
-        }
-        return url
-    }
+
 
     console.log('Guias products:', products)
 
@@ -128,45 +117,13 @@ export default function Guias({ products = [], purchases = [] }: GuiasProps) {
             </div>
 
             {/* Video Player Modal */}
-            <AnimatePresence>
-                {playingVideo && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-                        onClick={() => setPlayingVideo(null)}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white rounded-2xl overflow-hidden w-full max-w-4xl shadow-2xl relative"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <div className="p-4 border-b flex justify-between items-center">
-                                <h3 className="font-bold text-lg">{playingVideo.title}</h3>
-                                <button
-                                    onClick={() => setPlayingVideo(null)}
-                                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                                >
-                                    <X className="w-6 h-6" />
-                                </button>
-                            </div>
-                            <div className="aspect-video bg-black">
-                                <iframe
-                                    src={getEmbedUrl(playingVideo.cloudflare_video_id)}
-                                    className="w-full h-full"
-                                    title={playingVideo.title}
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {playingVideo && (
+                <VideoPlayer
+                    title={playingVideo.title}
+                    videoId={playingVideo.cloudflare_video_id}
+                    onClose={() => setPlayingVideo(null)}
+                />
+            )}
         </>
     )
 }
