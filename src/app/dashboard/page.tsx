@@ -57,7 +57,6 @@ export default async function DashboardPage() {
             .from('videos')
             .select('*')
             .eq('is_published', true)
-            .order('created_at', { ascending: false })
 
         if (videosError) {
             console.error('Error fetching videos:', videosError)
