@@ -65,9 +65,9 @@ export default function DashboardClient({ user, profile, subscription, products,
         <div className="min-h-screen bg-gray-50">
             {/* Sub-navbar / Tab Navigation */}
             <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-                <div className="max-w-4xl mx-auto">
-                    <div className="flex justify-center">
-                        <div className="flex space-x-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-start md:justify-center overflow-x-auto">
+                        <div className="flex space-x-8 min-w-max">
                             <TabButton
                                 isActive={activeTab === 'planes'}
                                 onClick={() => setActiveTab('planes')}
@@ -96,7 +96,7 @@ export default function DashboardClient({ user, profile, subscription, products,
             </div>
 
             {/* Main Content Area */}
-            <div className="max-w-4xl mx-auto p-4">
+            <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
                 <motion.div
                     key={activeTab}
                     initial={{ opacity: 0, y: 10 }}
@@ -114,7 +114,8 @@ export default function DashboardClient({ user, profile, subscription, products,
                     {activeTab === 'videos' && hasActiveSubscription && (
                         <div className="space-y-6">
                             {/* Trimesters Accordion */}
-                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            {/* Trimesters Accordion */}
+                            <div className="space-y-4">
                                 {TRIMESTERS.map((trimester) => {
                                     const isExpanded = expandedTrimester === trimester.id
                                     const weeks = Array.from(
@@ -123,44 +124,50 @@ export default function DashboardClient({ user, profile, subscription, products,
                                     )
 
                                     return (
-                                        <div key={trimester.id} className="border-b last:border-0 border-gray-100">
+                                        <div
+                                            key={trimester.id}
+                                            className={`
+                                                bg-white rounded-xl border transition-all duration-300 overflow-hidden
+                                                ${isExpanded
+                                                    ? 'border-[#986C4A]/30 shadow-md ring-1 ring-[#986C4A]/10'
+                                                    : 'border-[#E8E4DF] shadow-sm hover:border-[#986C4A]/30'
+                                                }
+                                            `}
+                                        >
                                             <button
                                                 onClick={() => setExpandedTrimester(isExpanded ? null : trimester.id)}
-                                                className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors text-left"
+                                                className="w-full flex items-center justify-between p-5 md:p-6 text-left transition-colors hover:bg-[#FAF8F6]"
                                             >
-                                                <h3 className="text-xl font-serif text-[#986C4A]">
+                                                <h3 className={`text-xl md:text-2xl font-serif transition-colors ${isExpanded ? 'text-[#986C4A]' : 'text-[#262422]'}`}>
                                                     {trimester.label}
                                                 </h3>
-                                                {isExpanded ? (
-                                                    <Minus className="w-6 h-6 text-[#986C4A]" />
-                                                ) : (
-                                                    <Plus className="w-6 h-6 text-[#986C4A]" />
-                                                )}
+                                                <div className={`
+                                                    p-2 rounded-full transition-all duration-300
+                                                    ${isExpanded ? 'bg-[#986C4A] text-white rotate-180' : 'bg-[#FAF8F6] text-[#986C4A]'}
+                                                `}>
+                                                    {isExpanded ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                                                </div>
                                             </button>
 
                                             {isExpanded && (
-                                                <div className="p-6 pt-0 animate-in slide-in-from-top-2">
-                                                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                                <div className="p-5 md:p-6 pt-0 animate-in slide-in-from-top-2">
+                                                    <div className="w-full h-px bg-[#E8E4DF] mb-6 alpha-20" />
+                                                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
                                                         {weeks.map((week) => (
                                                             <button
                                                                 key={week}
                                                                 onClick={() => handleWeekSelect(week)}
                                                                 className={`
-                                                                    p-4 rounded-lg border text-sm font-medium transition-all
-                                                                    flex items-center gap-3
+                                                                    py-3 px-2 rounded-lg text-sm font-medium transition-all duration-200
+                                                                    flex flex-col items-center justify-center gap-1
                                                                     ${selectedWeek === week
-                                                                        ? 'border-[#986C4A] bg-[#986C4A]/5 text-[#986C4A]'
-                                                                        : 'border-gray-200 text-gray-600 hover:border-[#986C4A]/50'
+                                                                        ? 'bg-[#986C4A] text-white shadow-md transform scale-105'
+                                                                        : 'bg-[#FAF8F6] text-[#6B6B6B] hover:bg-[#E8E4DF] hover:text-[#262422]'
                                                                     }
                                                                 `}
                                                             >
-                                                                <div className={`
-                                                                    w-4 h-4 rounded border flex items-center justify-center
-                                                                    ${selectedWeek === week ? 'border-[#986C4A] bg-[#986C4A]' : 'border-gray-300'}
-                                                                `}>
-                                                                    {selectedWeek === week && <div className="w-2 h-2 bg-white rounded-sm" />}
-                                                                </div>
-                                                                SEMANA {week}
+                                                                <span className="text-xs opacity-80 uppercase tracking-wider">Semana</span>
+                                                                <span className="text-lg font-bold leading-none">{week}</span>
                                                             </button>
                                                         ))}
                                                     </div>
@@ -172,48 +179,89 @@ export default function DashboardClient({ user, profile, subscription, products,
                             </div>
 
                             {/* Videos List for Selected Week */}
+                            {/* Videos List for Selected Week */}
                             {selectedWeek && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm"
+                                    className="pt-8"
                                 >
-                                    <h2 className="text-3xl font-serif text-[#1e293b] mb-8 pb-4 border-b border-gray-200">
-                                        Pilates + Fuerza : Semana {selectedWeek}
+                                    {/* Heading Style like the image */}
+                                    <h2 className="text-3xl md:text-4xl font-serif text-[#262422] mb-12">
+                                        Pilates + Fuerza : <span className="font-light">Semana {selectedWeek}</span>
                                     </h2>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                                    {/* Minimalist 7-Column Layout */}
+                                    <div className="hidden md:grid grid-cols-7 gap-4 border-t border-[#E8E4DF] pt-6">
                                         {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].map((day, index) => {
                                             const dayNumber = index + 1
                                             const video = currentVideos.find((v: any) => v.dia === dayNumber)
 
                                             return (
-                                                <div key={day} className="space-y-4">
-                                                    <h3 className="text-[#334155] font-bold text-center text-sm uppercase tracking-wide">
+                                                <div key={day} className="flex flex-col gap-4">
+                                                    {/* Day Header */}
+                                                    <h4 className="text-[#262422] font-bold text-sm mb-2">
                                                         {day}
-                                                    </h3>
+                                                    </h4>
 
-                                                    <div className="pt-2">
+                                                    {/* Content */}
+                                                    <div className="flex flex-col gap-3">
                                                         {video ? (
-                                                            <div
+                                                            <button
                                                                 onClick={() => setSelectedVideo(video)}
-                                                                className="group cursor-pointer flex items-start gap-2 text-sm text-gray-600 hover:text-[#986C4A] transition-colors"
+                                                                className="group text-left focus:outline-none"
                                                             >
-                                                                <div className="mt-1 w-4 h-4 rounded border border-gray-300 group-hover:border-[#986C4A] flex-shrink-0" />
-                                                                <span className="leading-snug">
-                                                                    <span className="font-medium">{video.title}</span>
-                                                                    {video.duration && (
-                                                                        <span className="text-gray-400 ml-1">
-                                                                            ({Math.floor(video.duration / 60)}&apos;)
+                                                                <div className="flex items-start gap-2">
+
+                                                                    <div className="flex flex-col">
+                                                                        <span className="text-sm text-[#6B6B6B] group-hover:text-[#986C4A] leading-tight transition-colors">
+                                                                            {video.title}
                                                                         </span>
-                                                                    )}
-                                                                </span>
-                                                            </div>
+                                                                        {video.duration && (
+                                                                            <span className="text-[10px] text-[#DCD8D3] mt-0.5">
+                                                                                ({Math.floor(video.duration / 60)}&apos;)
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </button>
                                                         ) : (
-                                                            <div className="text-center text-gray-300 text-sm italic">
-                                                                Descanso
+                                                            <div className="flex items-center justify-center pt-2">
+                                                                <div className="w-4 h-px bg-[#E8E4DF]" />
                                                             </div>
                                                         )}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+
+                                    {/* Mobile View (Vertical List) */}
+                                    <div className="md:hidden space-y-6">
+                                        {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].map((day, index) => {
+                                            const dayNumber = index + 1
+                                            const video = currentVideos.find((v: any) => v.dia === dayNumber)
+                                            if (!video) return null // Optional: Hide rest days on mobile to save space? Or show them compact. keeping logical flow.
+
+                                            return (
+                                                <div key={day} className="flex gap-4 border-b border-[#E8E4DF] pb-4 last:border-0">
+                                                    <div className="w-24 shrink-0">
+                                                        <span className="text-sm font-bold text-[#262422]">{day}</span>
+                                                    </div>
+                                                    <div>
+                                                        <button
+                                                            onClick={() => setSelectedVideo(video)}
+                                                            className="text-left w-full group"
+                                                        >
+                                                            <div className="flex items-start gap-3">
+                                                                <span className="text-sm text-[#6B6B6B] group-hover:text-[#986C4A]">
+                                                                    {video.title}
+                                                                    <span className="text-xs text-[#DCD8D3] ml-2">
+                                                                        ({Math.floor(video.duration / 60)}&apos;)
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             )
