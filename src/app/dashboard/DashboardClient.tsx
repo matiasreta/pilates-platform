@@ -8,6 +8,7 @@ import Guias from '@/components/Guias'
 import Libros from '@/components/Libros'
 import { motion } from 'framer-motion'
 import { Play, Plus, Minus } from 'lucide-react'
+import Image from 'next/image'
 import VideoPlayer from '@/components/VideoPlayer'
 
 interface DashboardClientProps {
@@ -113,6 +114,26 @@ export default function DashboardClient({ user, profile, subscription, products,
                     {activeTab === 'libros' && <Libros />}
                     {activeTab === 'videos' && hasActiveSubscription && (
                         <div className="space-y-6">
+                            {/* Banner Pilates Embarazadas */}
+                            <div className="relative w-full h-[200px] md:h-[280px] rounded-2xl overflow-hidden shadow-sm group cursor-pointer mb-8">
+                                <Image
+                                    src="/pilates-pregnant-banner.jpg"
+                                    alt="Pilates para embarazadas"
+                                    fill
+                                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                                />
+                                {/* Background Overlay for readability */}
+                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-700" />
+
+                                <div className="text-white absolute inset-0 flex flex-col justify-center p-8 md:p-12">
+                                    <p className="text-3xl md:text-5xl font-serif  mb-2 tracking-wide">
+                                        Pilates para<br />embarazadas
+                                    </p>
+                                    <p className=" text-sm md:text-base font-medium max-w-md">
+                                        Ejercicios seguros y efectivos para cada etapa
+                                    </p>
+                                </div>
+                            </div>
                             {/* Trimesters Accordion */}
                             {/* Trimesters Accordion */}
                             <div className="space-y-4">
@@ -275,6 +296,7 @@ export default function DashboardClient({ user, profile, subscription, products,
                                     Selecciona una semana para ver los videos disponibles
                                 </div>
                             )}
+
                         </div>
                     )}
                 </motion.div>
