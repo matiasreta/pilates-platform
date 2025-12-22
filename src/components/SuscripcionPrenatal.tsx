@@ -84,7 +84,7 @@ export default function SuscripcionPrenatal({ user, subscription, onStartPlan }:
                     </p>
 
                     <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-bold text-[#986C4A] font-[family-name:var(--font-poppins)]">
+                        <span className="text-3xl font-bold text-[#751D68] font-[family-name:var(--font-poppins)]">
                             $29
                         </span>
                         <span className="text-xs text-[#333333]/60">/mes</span>
@@ -100,7 +100,7 @@ export default function SuscripcionPrenatal({ user, subscription, onStartPlan }:
                         'Soporte prioritario',
                     ].map((feature) => (
                         <li key={feature} className="flex items-start gap-2">
-                            <Check className="w-4 h-4 shrink-0 mt-0.5 text-[#986C4A]" strokeWidth={2.5} />
+                            <Check className="w-4 h-4 shrink-0 mt-0.5 text-[#751D68]" strokeWidth={2.5} />
                             <span className="text-sm text-[#333333]/80 font-[family-name:var(--font-inter)]">
                                 {feature}
                             </span>
@@ -121,7 +121,7 @@ export default function SuscripcionPrenatal({ user, subscription, onStartPlan }:
                     className={`
                         cursor-pointer
                         w-full py-2.5 px-4 rounded-lg text-sm font-semibold transition-all
-                        bg-[#333333] text-white hover:bg-black
+                        bg-[#751D68] text-white hover:bg-[#751D68]/90
                         disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2
                     `}
                 >

@@ -89,6 +89,7 @@ export default function DashboardClient({ user, profile, subscription, products,
                                     isActive={activeTab === 'videos'}
                                     onClick={() => setActiveTab('videos')}
                                     label="Videos"
+                                    activeColor="#751D68"
                                 />
                             )}
                         </div>
@@ -154,8 +155,8 @@ export default function DashboardClient({ user, profile, subscription, products,
                                             className={`
                                                 bg-white rounded-xl border transition-all duration-300 overflow-hidden
                                                 ${isExpanded
-                                                    ? 'border-[#986C4A]/30 shadow-md ring-1 ring-[#986C4A]/10'
-                                                    : 'border-[#E8E4DF] shadow-sm hover:border-[#986C4A]/30'
+                                                    ? 'border-[#751D68]/30 shadow-md ring-1 ring-[#751D68]/10'
+                                                    : 'border-[#E8E4DF] shadow-sm hover:border-[#751D68]/30'
                                                 }
                                             `}
                                         >
@@ -163,12 +164,12 @@ export default function DashboardClient({ user, profile, subscription, products,
                                                 onClick={() => setExpandedTrimester(isExpanded ? null : trimester.id)}
                                                 className="w-full flex items-center justify-between p-5 md:p-5 text-left transition-colors hover:bg-[#FAF8F6]"
                                             >
-                                                <h3 className={`text-xl md:text-xl font-serif transition-colors ${isExpanded ? 'text-[#986C4A]' : 'text-[#262422]'}`}>
+                                                <h3 className={`text-xl md:text-xl font-serif transition-colors ${isExpanded ? 'text-[#751D68]' : 'text-[#262422] hover:text-[#751D68]/80'}`}>
                                                     {trimester.label}
                                                 </h3>
                                                 <div className={`
                                                     p-2 rounded-full transition-all duration-300
-                                                    ${isExpanded ? 'bg-[#986C4A] text-white rotate-180' : 'bg-[#FAF8F6] text-[#986C4A]'}
+                                                    ${isExpanded ? 'bg-[#751D68] text-white rotate-180' : 'bg-[#FAF8F6] text-[#751D68]'}
                                                 `}>
                                                     {isExpanded ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                                                 </div>
@@ -176,7 +177,7 @@ export default function DashboardClient({ user, profile, subscription, products,
 
                                             {isExpanded && (
                                                 <div className="p-5 md:p-6 pt-0 animate-in slide-in-from-top-2">
-                                                    <div className="w-full h-px bg-[#E8E4DF] mb-6 alpha-20" />
+                                                    <div className="w-full h-px bg-[#751D68]/10 mb-6" />
                                                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
                                                         {weeks.map((week) => (
                                                             <button
@@ -186,8 +187,8 @@ export default function DashboardClient({ user, profile, subscription, products,
                                                                     py-3 px-2 rounded-lg text-sm font-medium transition-all duration-200
                                                                     flex flex-col items-center justify-center gap-1
                                                                     ${selectedWeek === week
-                                                                        ? 'bg-[#986C4A] text-white shadow-md transform scale-105'
-                                                                        : 'bg-[#FAF8F6] text-[#6B6B6B] hover:bg-[#E8E4DF] hover:text-[#262422]'
+                                                                        ? 'bg-[#751D68] text-white shadow-md transform scale-105'
+                                                                        : 'bg-[#FAF8F6] text-[#6B6B6B] hover:bg-[#751D68]/10 hover:text-[#751D68]'
                                                                     }
                                                                 `}
                                                             >
@@ -213,7 +214,7 @@ export default function DashboardClient({ user, profile, subscription, products,
                                 >
                                     {/* Heading Style like the image */}
                                     <h2 className="text-3xl md:text-4xl font-serif text-[#262422] mb-12">
-                                        Pilates + Fuerza : <span className="font-light">Semana {selectedWeek}</span>
+                                        Pilates + Fuerza : <span className="font-light text-[#751D68]">Semana {selectedWeek}</span>
                                     </h2>
 
                                     {/* Minimalist 7-Column Layout */}
@@ -239,7 +240,7 @@ export default function DashboardClient({ user, profile, subscription, products,
                                                                 <div className="flex items-start gap-2">
 
                                                                     <div className="flex flex-col">
-                                                                        <span className="text-sm text-[#6B6B6B] group-hover:text-[#986C4A] leading-tight transition-colors">
+                                                                        <span className="text-sm text-[#6B6B6B] group-hover:text-[#751D68] leading-tight transition-colors">
                                                                             {video.title}
                                                                         </span>
                                                                         {video.duration && (
@@ -279,7 +280,7 @@ export default function DashboardClient({ user, profile, subscription, products,
                                                             className="text-left w-full group"
                                                         >
                                                             <div className="flex items-start gap-3">
-                                                                <span className="text-sm text-[#6B6B6B] group-hover:text-[#986C4A]">
+                                                                <span className="text-sm text-[#6B6B6B] group-hover:text-[#751D68]">
                                                                     {video.title}
                                                                     <span className="text-xs text-[#DCD8D3] ml-2">
                                                                         ({Math.floor(video.duration / 60)}&apos;)
@@ -318,17 +319,18 @@ export default function DashboardClient({ user, profile, subscription, products,
     )
 }
 
-function TabButton({ isActive, onClick, label }: { isActive: boolean; onClick: () => void; label: string }) {
+function TabButton({ isActive, onClick, label, activeColor = '#986C4A' }: { isActive: boolean; onClick: () => void; label: string; activeColor?: string }) {
     return (
         <button
             onClick={onClick}
             className={`
                 py-4 px-2 text-sm font-medium border-b-2 transition-colors relative
                 ${isActive
-                    ? 'border-[#986C4A] text-[#986C4A]'
+                    ? 'text-current'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }
             `}
+            style={isActive ? { borderColor: activeColor, color: activeColor } : {}}
         >
             {label}
         </button>
