@@ -59,7 +59,7 @@ export default function Benefits() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.7, delay: 0.2 }}
                     >
-                        <h3 className="mb-3 text-2xl font-bold leading-tight text-[#333333] lg:text-3xl font-[family-name:var(--font-poppins)]">
+                        <h3 className="mb-3 text-2xl leading-tight text-[#333333] lg:text-3xl font-[family-name:var(--font-poppins)]">
                             Beneficios para cada etapa de tu embarazo
                         </h3>
                         <p className="mb-6 text-sm leading-relaxed text-[#333333]/80 font-[family-name:var(--font-inter)]">

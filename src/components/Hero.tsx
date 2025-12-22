@@ -20,14 +20,14 @@ export default function Hero() {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 flex h-full flex-col justify-center px-6 sm:px-12 lg:px-24">
+            <div className="relative z-10 flex h-full flex-col justify-center items-center sm:items-start px-6 sm:px-12 lg:px-24">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: 'easeOut' }}
-                    className="max-w-2xl"
+                    className="max-w-xs text-center sm:text-left"
                 >
-                    <h1 className="mb-2 text-5xl font-bold leading-tight text-white sm:text-5xl md:text-6xl font-[family-name:var(--font-poppins)]">
+                    <h1 className="mb-2 text-5xl leading-tight text-white sm:text-5xl md:text-7xl ">
                         Soy Myss
                         <br />
                         tu instructora

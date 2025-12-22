@@ -49,7 +49,7 @@ export default function FAQ() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-10"
                 >
-                    <h3 className="text-2xl font-bold leading-tight text-[#333333] lg:text-3xl font-[family-name:var(--font-poppins)] mb-3">
+                    <h3 className="text-2xl leading-tight text-[#333333] lg:text-3xl font-[family-name:var(--font-poppins)] mb-3">
                         Preguntas Frecuentes
                     </h3>
                     <p className="text-sm text-[#333333]/80 font-[family-name:var(--font-inter)]">

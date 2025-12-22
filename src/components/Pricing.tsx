@@ -29,7 +29,7 @@ export default function Pricing() {
                     >
                         {/* Plan Header */}
                         <div className="text-center mb-6">
-                            <h3 className="text-2xl font-bold mb-2 text-[#333333] font-[family-name:var(--font-poppins)]">
+                            <h3 className="text-2xl mb-2 text-[#333333] font-[family-name:var(--font-poppins)]">
                                 Plan Prenatal
                             </h3>
 
