@@ -11,7 +11,7 @@ export default function Home() {
     <div className="min-h-screen">
       <Hero />
       <Benefits />
-      <div className="border-t border-[#DCD8D3]" />
+
       <Pricing />
 
       <FAQ />

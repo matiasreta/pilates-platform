@@ -30,7 +30,9 @@ export default function Hero() {
                     <h1 className="mb-2 text-5xl font-bold leading-tight text-white sm:text-5xl md:text-6xl font-[family-name:var(--font-poppins)]">
                         Soy Myss
                         <br />
-                        instructora de pilates
+                        tu instructora
+                        <br />
+                        de pilates
                     </h1>
                     <p className="mb-12 text-lg sm:text-xl font-[family-name:var(--font-inter)]">
                         Me encanta ayudar a las mujeres a encontrar su equilibrio

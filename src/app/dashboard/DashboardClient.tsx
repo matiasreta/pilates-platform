@@ -156,17 +156,17 @@ export default function DashboardClient({ user, profile, subscription, products,
                                                 bg-white rounded-xl border transition-all duration-300 overflow-hidden
                                                 ${isExpanded
                                                     ? 'border-[#751D68]/30 shadow-md ring-1 ring-[#751D68]/10'
-                                                    : 'border-[#E8E4DF] shadow-sm hover:border-[#751D68]/30'
+                                                    : 'border-[#751D68] shadow-sm hover:border-[#751D68]/30'
                                                 }
                                             `}
                                         >
                                             <button
                                                 onClick={() => setExpandedTrimester(isExpanded ? null : trimester.id)}
-                                                className="w-full flex items-center justify-between p-5 md:p-5 text-left transition-colors hover:bg-[#FAF8F6]"
+                                                className="w-full flex items-center justify-between p-5 md:p-5 text-left transition-colors hover:bg-[#FFF8FE]"
                                             >
-                                                <h3 className={`text-xl md:text-xl font-serif transition-colors ${isExpanded ? 'text-[#751D68]' : 'text-[#262422] hover:text-[#751D68]/80'}`}>
+                                                <p className="text-2xl md:text-2xl font-serif text-[#751D68] transition-colors">
                                                     {trimester.label}
-                                                </h3>
+                                                </p>
                                                 <div className={`
                                                     p-2 rounded-full transition-all duration-300
                                                     ${isExpanded ? 'bg-[#751D68] text-white rotate-180' : 'bg-[#FAF8F6] text-[#751D68]'}
