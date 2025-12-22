@@ -12,6 +12,8 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null)
     const [isSignUp, setIsSignUp] = useState(false)
     const [fullName, setFullName] = useState('')
+    const [localidad, setLocalidad] = useState('')
+    const [edad, setEdad] = useState('')
     const router = useRouter()
     const supabase = createClient()
 
@@ -29,6 +31,8 @@ export default function LoginPage() {
                     options: {
                         data: {
                             full_name: fullName,
+                            Localidad: localidad,
+                            edad: parseInt(edad),
                         },
                     },
                 })
@@ -72,10 +76,10 @@ export default function LoginPage() {
                         transition={{ delay: 0.2 }}
                         className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
                     >
-                        Pilates Platform
+                        Bienvenida
                     </motion.h1>
                     <p className="text-gray-600 mt-2">
-                        {isSignUp ? 'Crea tu cuenta' : 'Bienvenida de nuevo'}
+                        {isSignUp ? 'Crea tu cuenta' : 'Completa tus datos'}
                     </p>
                 </div>
 
@@ -88,20 +92,53 @@ export default function LoginPage() {
                 >
                     <form onSubmit={handleAuth} className="space-y-6">
                         {isSignUp && (
-                            <div>
-                                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Nombre Completo
-                                </label>
-                                <input
-                                    id="fullName"
-                                    type="text"
-                                    value={fullName}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                    required={isSignUp}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none"
-                                    placeholder="Tu nombre completo"
-                                />
-                            </div>
+                            <>
+                                <div>
+                                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                                        Nombre Completo
+                                    </label>
+                                    <input
+                                        id="fullName"
+                                        type="text"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        required={isSignUp}
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none"
+                                        placeholder="Tu nombre completo"
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label htmlFor="localidad" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Localidad
+                                        </label>
+                                        <input
+                                            id="localidad"
+                                            type="text"
+                                            value={localidad}
+                                            onChange={(e) => setLocalidad(e.target.value)}
+                                            required={isSignUp}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none"
+                                            placeholder="Ciudad"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="edad" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Edad
+                                        </label>
+                                        <input
+                                            id="edad"
+                                            type="number"
+                                            value={edad}
+                                            onChange={(e) => setEdad(e.target.value)}
+                                            required={isSignUp}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none"
+                                            placeholder="Ej: 25"
+                                        />
+                                    </div>
+                                </div>
+                            </>
                         )}
 
                         <div>
