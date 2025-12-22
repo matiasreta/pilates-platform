@@ -7,9 +7,9 @@ export default function SuscripcionVacaciones() {
         <div className="bg-white border text-left border-gray-200 hover:border-gray-300 transition-colors p-6 rounded-xl w-full max-w-sm flex flex-col h-full shadow-sm relative overflow-hidden group">
             {/* Header */}
             <div className="mb-6">
-                <h3 className="text-xl font-bold text-[#333333] font-[family-name:var(--font-poppins)] mb-1">
+                <p className="text-3xl md:text-4xl font-serif text-[#333333] mb-1">
                     Pilates en vacaciones
-                </h3>
+                </p>
                 <p className="text-xs text-[#333333]/60 mb-4 font-[family-name:var(--font-inter)]">
                     Mantente activa donde estés
                 </p>

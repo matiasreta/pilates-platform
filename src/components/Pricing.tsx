@@ -16,7 +16,7 @@ const features = [
 
 export default function Pricing() {
     return (
-        <section id="pricing" className="relative bg-[#FFFBF8] py-12 lg:py-16">
+        <section id="pricing" className="relative bg-[#FFF8FE] py-12 lg:py-16">
             <div className="mx-auto max-w-6xl px-6 lg:px-8">
                 <div className="grid gap-8 lg:grid-cols-2 lg:gap-10 items-center">
                     {/* Pricing Card */}

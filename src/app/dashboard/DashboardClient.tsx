@@ -23,9 +23,9 @@ interface DashboardClientProps {
 type TabType = 'planes' | 'guias' | 'libros' | 'videos'
 
 const TRIMESTERS = [
-    { id: 1, label: '1er Trimestre', startWeek: 1, endWeek: 15 },
+    { id: 1, label: '1º Trimestre', startWeek: 1, endWeek: 15 },
     { id: 2, label: '2º Trimestre', startWeek: 16, endWeek: 30 },
-    { id: 3, label: '3er Trimestre', startWeek: 31, endWeek: 45 },
+    { id: 3, label: '3º Trimestre', startWeek: 31, endWeek: 45 },
 ]
 
 export default function DashboardClient({ user, profile, subscription, products, purchases, videos = [] }: DashboardClientProps) {
@@ -106,7 +106,11 @@ export default function DashboardClient({ user, profile, subscription, products,
                 >
                     {activeTab === 'planes' && (
                         <div className="flex flex-col md:flex-row justify-center gap-6 items-start">
-                            <SuscripcionPrenatal user={user} subscription={subscription} />
+                            <SuscripcionPrenatal
+                                user={user}
+                                subscription={subscription}
+                                onStartPlan={() => setActiveTab('videos')}
+                            />
                             <SuscripcionVacaciones />
                         </div>
                     )}
@@ -157,9 +161,9 @@ export default function DashboardClient({ user, profile, subscription, products,
                                         >
                                             <button
                                                 onClick={() => setExpandedTrimester(isExpanded ? null : trimester.id)}
-                                                className="w-full flex items-center justify-between p-5 md:p-6 text-left transition-colors hover:bg-[#FAF8F6]"
+                                                className="w-full flex items-center justify-between p-5 md:p-5 text-left transition-colors hover:bg-[#FAF8F6]"
                                             >
-                                                <h3 className={`text-xl md:text-2xl font-serif transition-colors ${isExpanded ? 'text-[#986C4A]' : 'text-[#262422]'}`}>
+                                                <h3 className={`text-xl md:text-xl font-serif transition-colors ${isExpanded ? 'text-[#986C4A]' : 'text-[#262422]'}`}>
                                                     {trimester.label}
                                                 </h3>
                                                 <div className={`

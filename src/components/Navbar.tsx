@@ -19,7 +19,7 @@ export default function Navbar() {
             <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8">
                 {/* Logo */}
                 <Link href="/" className="text-2xl font-bold tracking-tight text-white">
-                    PILATES
+                    I I I
                 </Link>
 
                 {/* Desktop Navigation */}

@@ -220,18 +220,20 @@ h6 {
 }
 
 h1 {
-  font-size: var(--text-h1);
+  font-family: var(--font-serif);
   line-height: var(--line-height-h1);
   font-weight: var(--weight-h1);
 }
 
 h2 {
+  font-family: var(--font-serif);
   font-size: var(--text-h2);
   line-height: var(--line-height-h2);
   font-weight: var(--weight-h2);
 }
 
 h3 {
+  font-family: var(--font-serif);
   font-size: var(--text-h3);
   line-height: var(--line-height-h3);
   font-weight: var(--weight-h3);

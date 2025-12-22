@@ -39,7 +39,7 @@ export default function FAQ() {
     };
 
     return (
-        <section className="relative bg-gradient-to-b from-[#FFFBF8] to-[#FFFFFF] py-12 lg:py-16">
+        <section className="relative bg-gradient-to-b from-[#FFF8FE] to-[#FFFFFF] py-12 lg:py-16">
             <div className="mx-auto max-w-3xl px-6 lg:px-8">
                 {/* Header */}
                 <motion.div
@@ -49,9 +49,9 @@ export default function FAQ() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-10"
                 >
-                    <h2 className="text-2xl font-bold leading-tight text-[#333333] lg:text-3xl font-[family-name:var(--font-poppins)] mb-3">
+                    <h3 className="text-2xl font-bold leading-tight text-[#333333] lg:text-3xl font-[family-name:var(--font-poppins)] mb-3">
                         Preguntas Frecuentes
-                    </h2>
+                    </h3>
                     <p className="text-sm text-[#333333]/80 font-[family-name:var(--font-inter)]">
                         Resolvemos tus dudas sobre el programa
                     </p>

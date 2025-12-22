@@ -9,9 +9,10 @@ import { User } from '@supabase/supabase-js'
 interface SuscripcionPrenatalProps {
     user: User
     subscription: any
+    onStartPlan?: () => void
 }
 
-export default function SuscripcionPrenatal({ user, subscription }: SuscripcionPrenatalProps) {
+export default function SuscripcionPrenatal({ user, subscription, onStartPlan }: SuscripcionPrenatalProps) {
     const searchParams = useSearchParams()
     const [showSuccess, setShowSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -75,9 +76,9 @@ export default function SuscripcionPrenatal({ user, subscription }: SuscripcionP
 
                 {/* Header */}
                 <div className="mb-6">
-                    <h3 className="text-xl font-bold text-[#333333] font-[family-name:var(--font-poppins)] mb-1">
+                    <p className="text-3xl md:text-4xl font-serif text-[#333333] mb-1">
                         Plan Prenatal
-                    </h3>
+                    </p>
                     <p className="text-xs text-[#333333]/60 mb-4 font-[family-name:var(--font-inter)]">
                         Acompañamiento completo
                     </p>
@@ -115,7 +116,7 @@ export default function SuscripcionPrenatal({ user, subscription }: SuscripcionP
 
                 {/* Action Button */}
                 <button
-                    onClick={isSubscribed ? () => { } : handleSubscribe}
+                    onClick={isSubscribed ? onStartPlan : handleSubscribe}
                     disabled={loading}
                     className={`
                         cursor-pointer

@@ -16,7 +16,7 @@ export default function Hero() {
                     className="object-cover object-center"
                     priority
                 />
-                <div className="absolute inset-0 bg-white/10" />
+                <div className="absolute inset-0 bg-white/23" />
             </div>
 
             {/* Content */}
@@ -27,10 +27,10 @@ export default function Hero() {
                     transition={{ duration: 0.8, ease: 'easeOut' }}
                     className="max-w-2xl"
                 >
-                    <h1 className="mb-2 text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl font-[family-name:var(--font-poppins)]">
-                        Soy Luciana,
-                        instructora de pilates y acompañante
-                        de movimiento consciente.
+                    <h1 className="mb-2 text-5xl font-bold leading-tight text-white sm:text-5xl md:text-6xl font-[family-name:var(--font-poppins)]">
+                        Soy Myss
+                        <br />
+                        instructora de pilates
                     </h1>
                     <p className="mb-12 text-lg sm:text-xl font-[family-name:var(--font-inter)]">
                         Me encanta ayudar a las mujeres a encontrar su equilibrio
