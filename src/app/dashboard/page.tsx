@@ -50,6 +50,16 @@ export default async function DashboardPage() {
         console.log('Server-side purchases fetched:', purchases)
     }
 
+    // Get libros
+    const { data: libros, error: librosError } = await supabase
+        .from('libros')
+        .select('*')
+        .order('orden', { ascending: true })
+
+    if (librosError) {
+        console.error('Error fetching libros:', librosError)
+    }
+
     // Get videos if subscription is active
     let videos = []
     if (subscription && subscription.status === 'active') {
@@ -71,6 +81,7 @@ export default async function DashboardPage() {
         subscription={subscription}
         products={products || []}
         purchases={purchases || []}
+        libros={libros || []}
         videos={videos}
     />
 }

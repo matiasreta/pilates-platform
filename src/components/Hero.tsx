@@ -11,7 +11,7 @@ export default function Hero() {
             <div className="absolute inset-0">
                 <Image
                     src="/hero-bg-latest.png"
-                    alt="Luciana instructora de pilates con pelota"
+                    alt="instructora de pilates con pelota"
                     fill
                     className="object-cover object-center"
                     priority

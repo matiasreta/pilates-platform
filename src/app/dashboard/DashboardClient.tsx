@@ -5,7 +5,7 @@ import { useState } from 'react'
 import SuscripcionPrenatal from '@/components/SuscripcionPrenatal'
 import SuscripcionVacaciones from '@/components/SuscripcionVacaciones'
 import Guias from '@/components/Guias'
-import Libros from '@/components/Libros'
+import Libros, { type Libro } from '@/components/Libros'
 import Videos from '@/components/dashboard/Videos'
 import { motion } from 'framer-motion'
 
@@ -15,12 +15,13 @@ interface DashboardClientProps {
     subscription: any
     products: any[]
     purchases: any[]
+    libros: Libro[]
     videos?: any[]
 }
 
 type TabType = 'planes' | 'guias' | 'libros' | 'videos'
 
-export default function DashboardClient({ user, profile, subscription, products, purchases, videos = [] }: DashboardClientProps) {
+export default function DashboardClient({ user, profile, subscription, products, purchases, libros, videos = [] }: DashboardClientProps) {
     const [activeTab, setActiveTab] = useState<TabType>('planes')
 
     return (
@@ -75,7 +76,7 @@ export default function DashboardClient({ user, profile, subscription, products,
                         </div>
                     )}
                     {activeTab === 'guias' && <Guias products={products} purchases={purchases} />}
-                    {activeTab === 'libros' && <Libros />}
+                    {activeTab === 'libros' && <Libros libros={libros} />}
                     {activeTab === 'videos' && <Videos user={user} subscription={subscription} videos={videos} />}
                 </motion.div>
             </div>

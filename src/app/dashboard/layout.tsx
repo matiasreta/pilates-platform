@@ -3,7 +3,7 @@ import DashboardNavbar from "@/components/DashboardNavbar";
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-    title: "Dashboard - Pilates con Luciana",
+    title: "Dashboard - Pilates con myss",
     description: "Panel de control para usuarios registrados",
 };
 
