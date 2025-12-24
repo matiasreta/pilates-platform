@@ -121,6 +121,8 @@ export default function Guias({ products = [], purchases = [] }: GuiasProps) {
                 <VideoPlayer
                     title={playingVideo.title}
                     videoId={playingVideo.cloudflare_video_id}
+                    videoDbId={playingVideo.video_id || undefined}
+                    description={playingVideo.description}
                     onClose={() => setPlayingVideo(null)}
                 />
             )}

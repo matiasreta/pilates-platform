@@ -217,9 +217,9 @@ export default function DashboardClient({ user, profile, subscription, products,
                                         Pilates + Fuerza : <span className="font-light text-[#751D68]">Semana {selectedWeek}</span>
                                     </h2>
 
-                                    {/* Minimalist 7-Column Layout */}
-                                    <div className="hidden md:grid grid-cols-7 gap-4 border-t border-[#E8E4DF] pt-6">
-                                        {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].map((day, index) => {
+                                    {/* Minimalist 5-Column Layout */}
+                                    <div className="hidden md:grid grid-cols-5 gap-4 border-t border-[#E8E4DF] pt-6">
+                                        {['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5'].map((day, index) => {
                                             const dayNumber = index + 1
                                             const video = currentVideos.find((v: any) => v.dia === dayNumber)
 
@@ -264,7 +264,7 @@ export default function DashboardClient({ user, profile, subscription, products,
 
                                     {/* Mobile View (Vertical List) */}
                                     <div className="md:hidden space-y-6">
-                                        {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].map((day, index) => {
+                                        {['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5'].map((day, index) => {
                                             const dayNumber = index + 1
                                             const video = currentVideos.find((v: any) => v.dia === dayNumber)
                                             if (!video) return null // Optional: Hide rest days on mobile to save space? Or show them compact. keeping logical flow.
@@ -312,6 +312,8 @@ export default function DashboardClient({ user, profile, subscription, products,
                 <VideoPlayer
                     title={selectedVideo.title}
                     videoId={selectedVideo.cloudflare_video_id}
+                    videoDbId={selectedVideo.id}
+                    description={selectedVideo.description}
                     onClose={() => setSelectedVideo(null)}
                 />
             )}

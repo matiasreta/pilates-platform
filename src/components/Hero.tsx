@@ -34,7 +34,7 @@ export default function Hero() {
                         <br />
                         de pilates
                     </h1>
-                    <p className="mb-12 text-lg sm:text-xl font-[family-name:var(--font-inter)]">
+                    <p className="mb-6 text-lg sm:text-xl font-[family-name:var(--font-inter)]">
                         Me encanta ayudar a las mujeres a encontrar su equilibrio
                         y conexión con su cuerpo a través de la práctica de pilates.
                     </p>
