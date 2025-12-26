@@ -93,17 +93,17 @@ export default function Favoritos({ userId }: FavoritosProps) {
                     Favoritos
                 </h2>
 
-                <div className="flex flex-wrap gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {favoriteVideos.map((video) => (
                         <button
                             key={video.id}
                             onClick={() => setSelectedVideo(video)}
-                            className="w-[280px] text-left group focus:outline-none shrink-0"
+                            className="w-full text-left group focus:outline-none"
                         >
-                            <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF8F6] border border-[#E8E4DF] hover:border-[#751D68]/30 hover:bg-[#FFF8FE] transition-all duration-200 h-full">
-                                <Star className="w-5 h-5 text-[#751D68] fill-[#751D68] shrink-0" />
+                            <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF8F6] border border-[#E8E4DF] hover:border-[#986C4A]/30 hover:bg-[#FDFBF9] transition-all duration-200 h-full">
+                                <Star className="w-5 h-5 text-[#986C4A] fill-[#986C4A] shrink-0" />
                                 <div className="flex-1 min-w-0">
-                                    <span className="text-sm text-[#6B6B6B] group-hover:text-[#751D68] transition-colors block truncate">
+                                    <span className="text-sm text-[#6B6B6B] group-hover:text-[#986C4A] transition-colors block truncate">
                                         {video.title}
                                     </span>
                                     {video.duration && (
