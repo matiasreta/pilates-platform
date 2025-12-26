@@ -18,46 +18,72 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Missing videoId' }, { status: 400 })
         }
 
-        // Check 1: Is this video a One-time Purchase Product (Guide Video)?
-        const { data: product } = await supabase
-            .from('products')
-            .select('stripe_price_id')
+        // Check: Find which product this video belongs to
+        const { data: videoRecord } = await supabase
+            .from('videos')
+            .select('product_id')
             .eq('cloudflare_video_id', videoId)
             .single()
 
-        let hasAccess = false;
+        let hasAccess = false
 
-        if (product) {
-            // It IS a guide/product. Access requires a specific purchase.
-            // Active Subscription does NOT grant access to these videos.
-            const { data: purchase } = await supabase
-                .from('one_time_purchases')
-                .select('id')
-                .eq('user_id', user.id)
-                .eq('stripe_price_id', product.stripe_price_id)
-                .eq('status', 'completed')
+        if (videoRecord && videoRecord.product_id) {
+            // Video is linked to a specific product. Check if user owns that product.
+            const { data: product } = await supabase
+                .from('products')
+                .select('stripe_price_id')
+                .eq('id', videoRecord.product_id)
                 .single()
 
-            if (purchase) {
-                hasAccess = true;
+            if (product) {
+                // Check Subscriptions using the product's price ID
+                // Note: Subscriptions table uses `price_id` which corresponds to stripe_price_id
+                const { data: subscription } = await supabase
+                    .from('subscriptions')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .eq('price_id', product.stripe_price_id)
+                    .eq('status', 'active')
+                    .single()
+
+                if (subscription) {
+                    hasAccess = true
+                }
+
+                // If not found in subscriptions, check One-time Purchases
+                if (!hasAccess) {
+                    const { data: purchase } = await supabase
+                        .from('one_time_purchases')
+                        .select('id')
+                        .eq('user_id', user.id)
+                        .eq('stripe_price_id', product.stripe_price_id)
+                        .eq('status', 'completed')
+                        .single()
+
+                    if (purchase) {
+                        hasAccess = true
+                    }
+                }
             }
         } else {
-            // It is NOT a product. It must be a subscription library video.
-            // Check for Active Subscription
+            // Legacy/Fallback: Video has no product_id. 
+            // Assume it belongs to the base "Plan Prenatal" membership or generalized access.
+            // Check for ANY active subscription.
             const { data: subscription } = await supabase
                 .from('subscriptions')
                 .select('status')
                 .eq('user_id', user.id)
+                .eq('status', 'active')
                 .single()
 
-            if (subscription && subscription.status === 'active') {
-                hasAccess = true;
+            if (subscription) {
+                hasAccess = true
             }
         }
 
         if (!hasAccess) {
             return NextResponse.json(
-                { error: product ? 'Guide purchase required' : 'Active subscription required' },
+                { error: 'You do not have access to this content.' },
                 { status: 403 }
             )
         }
