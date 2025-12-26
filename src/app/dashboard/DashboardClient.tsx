@@ -93,7 +93,7 @@ export default function DashboardClient({ user, profile, subscriptions = [], pro
                     )}
                     {activeTab === 'guias' && <Guias products={products} purchases={purchases} />}
                     {activeTab === 'libros' && <Libros libros={libros} />}
-                    {activeTab === 'videos' && <Videos user={user} subscriptions={subscriptions} videos={videos} />}
+                    {activeTab === 'videos' && <Videos user={user} subscriptions={subscriptions} videos={videos} products={products} />}
                 </motion.div>
             </div>
         </div>
