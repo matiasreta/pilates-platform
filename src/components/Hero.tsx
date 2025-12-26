@@ -28,7 +28,7 @@ export default function Hero() {
                     className="max-w-xs text-center sm:text-left"
                 >
                     <h1 className="mb-2 text-5xl leading-tight text-white sm:text-5xl md:text-7xl ">
-                        Soy Myss
+                        Soy Myssis
                         <br />
                         tu instructora
                         <br />

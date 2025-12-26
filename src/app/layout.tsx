@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Pilates con Myss - Instructora Profesional",
+  title: "Pilates con Myssis - Instructora Profesional",
   description: "Clases de pilates y programas especializados para embarazadas. Encuentra tu equilibrio y conexión con tu cuerpo.",
 };
 
