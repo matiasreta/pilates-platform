@@ -28,6 +28,8 @@ export async function POST(req: NextRequest) {
             .from('products')
             .select('*')
             .eq('stripe_price_id', priceId)
+            // Fix: In case there are duplicates, take the first one
+            .limit(1)
             .single()
 
         if (productError || !product) {

@@ -9,8 +9,8 @@ interface GuiasProps {
 }
 
 export default function Guias({ products = [], purchases = [] }: GuiasProps) {
-    // Filter strictly for 'payment' type products (one-time purchases)
-    const guiasProducts = products.filter(p => p.payment_type === 'payment')
+    // Filter strictly for 'payment' type products (one-time purchases) AND exclude books
+    const guiasProducts = products.filter(p => p.payment_type === 'payment' && !p.isBook)
 
     if (guiasProducts.length === 0) {
         return (
