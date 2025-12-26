@@ -32,8 +32,8 @@ export default function Pricing() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-[#333333] font-[family-name:var(--font-poppins)] mb-2">
-                        Planes
+                    <h2 className="text-3xl md:text-4xl text-[#333333] font-[family-name:var(--font-poppins)] mb-2">
+                        Planes mensuales
                     </h2>
                 </motion.div>
 
