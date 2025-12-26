@@ -6,12 +6,13 @@ import Favoritos from './Favoritos'
 
 interface VideosProps {
     user: User
-    subscription: any
+    subscriptions: any[]
     videos?: any[]
 }
 
-export default function Videos({ user, subscription, videos = [] }: VideosProps) {
-    const hasActiveSubscription = subscription?.status === 'active'
+export default function Videos({ user, subscriptions = [], videos = [] }: VideosProps) {
+    const hasActiveSubscription = subscriptions.some(s => s.status === 'active')
+    const hasAccess = hasActiveSubscription || videos.length > 0
 
     return (
         <div className="space-y-12">
@@ -19,7 +20,7 @@ export default function Videos({ user, subscription, videos = [] }: VideosProps)
             <Favoritos userId={user.id} />
 
             {/* Plan Prenatal Section */}
-            {hasActiveSubscription ? (
+            {hasAccess ? (
                 <PlanPrenatal videos={videos} />
             ) : (
                 <div className="text-center py-12 text-gray-400 bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
