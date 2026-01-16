@@ -17,15 +17,18 @@ export default function LoginPage() {
     const router = useRouter()
     const supabase = createClient()
 
+    const [loadingMessage, setLoadingMessage] = useState('')
+
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
         setError(null)
+        setLoadingMessage(isSignUp ? 'Creando tu cuenta...' : 'Iniciando sesión...')
 
         try {
             if (isSignUp) {
                 // Sign up - the profile will be created automatically by the trigger
-                const { error } = await supabase.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -39,8 +42,28 @@ export default function LoginPage() {
 
                 if (error) throw error
 
-                router.push('/dashboard')
-                router.refresh()
+                // Wait for the session to be established
+                setLoadingMessage('Configurando tu perfil...')
+
+                // If there's a session, redirect immediately
+                if (data.session) {
+                    setLoadingMessage('¡Listo! Redirigiendo...')
+                    router.push('/dashboard')
+                    router.refresh()
+                } else {
+                    // If no session but user exists (email confirmation might be required)
+                    // Try to sign in with the same credentials
+                    const { error: signInError } = await supabase.auth.signInWithPassword({
+                        email,
+                        password,
+                    })
+
+                    if (signInError) throw signInError
+
+                    setLoadingMessage('¡Listo! Redirigiendo...')
+                    router.push('/dashboard')
+                    router.refresh()
+                }
             } else {
                 // Sign in
                 const { error } = await supabase.auth.signInWithPassword({
@@ -50,14 +73,15 @@ export default function LoginPage() {
 
                 if (error) throw error
 
+                setLoadingMessage('¡Listo! Redirigiendo...')
                 router.push('/dashboard')
                 router.refresh()
             }
         } catch (error: any) {
             setError(error.message || 'Ocurrió un error durante la autenticación')
-        } finally {
             setLoading(false)
         }
+        // Note: Don't setLoading(false) on success - keep loading state during redirect
     }
 
     return (
@@ -192,7 +216,7 @@ export default function LoginPage() {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Procesando...
+                                    {loadingMessage || 'Procesando...'}
                                 </span>
                             ) : (
                                 isSignUp ? 'Crear Cuenta' : 'Iniciar Sesión'
