@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getCachedProducts, getCachedUserAccess } from '@/lib/cache'
 
 export async function POST(req: NextRequest) {
     try {
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Missing videoId' }, { status: 400 })
         }
 
-        // Check: Find which product this video belongs to
+        // Get video info (not cached - dynamic content)
         const { data: videoRecord } = await supabase
             .from('videos')
             .select('product_id')
@@ -29,56 +30,23 @@ export async function POST(req: NextRequest) {
 
         if (videoRecord && videoRecord.product_id) {
             // Video is linked to a specific product. Check if user owns that product.
-            const { data: product } = await supabase
-                .from('products')
-                .select('stripe_price_id')
-                .eq('id', videoRecord.product_id)
-                .single()
+            // Use cached data for products and user access
+            const [products, userAccess] = await Promise.all([
+                getCachedProducts(),
+                getCachedUserAccess(user.id)
+            ])
+
+            const product = products.find((p: any) => p.id === videoRecord.product_id)
 
             if (product) {
-                // Check Subscriptions using the product's price ID
-                // Note: Subscriptions table uses `price_id` which corresponds to stripe_price_id
-                const { data: subscription } = await supabase
-                    .from('subscriptions')
-                    .select('id')
-                    .eq('user_id', user.id)
-                    .eq('price_id', product.stripe_price_id)
-                    .eq('status', 'active')
-                    .single()
-
-                if (subscription) {
-                    hasAccess = true
-                }
-
-                // If not found in subscriptions, check One-time Purchases
-                if (!hasAccess) {
-                    const { data: purchase } = await supabase
-                        .from('one_time_purchases')
-                        .select('id')
-                        .eq('user_id', user.id)
-                        .eq('stripe_price_id', product.stripe_price_id)
-                        .eq('status', 'completed')
-                        .single()
-
-                    if (purchase) {
-                        hasAccess = true
-                    }
-                }
+                // Check if user has access to this product's price
+                hasAccess = userAccess.hasPriceAccess(product.stripe_price_id)
             }
         } else {
             // Legacy/Fallback: Video has no product_id. 
-            // Assume it belongs to the base "Plan Prenatal" membership or generalized access.
-            // Check for ANY active subscription.
-            const { data: subscription } = await supabase
-                .from('subscriptions')
-                .select('status')
-                .eq('user_id', user.id)
-                .eq('status', 'active')
-                .single()
-
-            if (subscription) {
-                hasAccess = true
-            }
+            // Check for ANY active subscription using cached data.
+            const userAccess = await getCachedUserAccess(user.id)
+            hasAccess = userAccess.hasActiveSubscription
         }
 
         if (!hasAccess) {
